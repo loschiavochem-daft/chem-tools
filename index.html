@@ -6,7 +6,7 @@
 <title>Stoichiometry — Solution Map</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;font-size:14px;color:#111;padding:1.5rem;max-width:760px;margin:0 auto}
+body{font-family:system-ui,sans-serif;font-size:14px;color:#111;padding:1.5rem;max-width:780px;margin:0 auto}
 input[type=text]{width:100%;padding:7px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;background:#fff;color:#111}
 input[type=text]:focus{outline:none;border-color:#555}
 h1{font-size:20px;font-weight:700;margin-bottom:4px}
@@ -31,7 +31,7 @@ h1{font-size:20px;font-weight:700;margin-bottom:4px}
 .sub-btn.dim{opacity:.3;pointer-events:none;cursor:default}
 .unit-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
 .u-btn{flex:0 0 100px;padding:12px 8px;border:2px solid #ddd;border-radius:10px;cursor:pointer;background:#f5f5f5;color:#888;text-align:center;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:3px}
-.u-btn .ul{font-size:16px;font-weight:700;line-height:1.2}
+.u-btn .ul{font-size:15px;font-weight:700;line-height:1.2}
 .u-btn .ud{font-size:10px;line-height:1.3}
 .u-btn:hover{border-color:#888;color:#111}
 .u-btn.sel{background:#185FA5;border-color:#185FA5;color:#fff}
@@ -41,7 +41,7 @@ h1{font-size:20px;font-weight:700;margin-bottom:4px}
 .sol-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
 .sol-field{display:flex;flex-direction:column;gap:4px}
 .sol-field label{font-size:12px;color:#666;font-weight:500}
-.sol-field input{width:120px;padding:7px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;background:#fff;color:#111}
+.sol-field input{width:110px;padding:7px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;background:#fff;color:#111}
 .sol-field input:focus{outline:none;border-color:#555}
 .sol-unit{font-size:12px;color:#888;margin-top:2px}
 .amt-in{width:140px;padding:7px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;background:#fff;color:#111;margin-top:10px;display:block}
@@ -49,8 +49,44 @@ h1{font-size:20px;font-weight:700;margin-bottom:4px}
 .go-btn{padding:10px 24px;font-size:14px;font-weight:700;border:none;border-radius:8px;cursor:pointer;margin-top:1rem;display:inline-block}
 .go-btn.dark{background:#111;color:#fff}.go-btn.dark:hover{background:#333}
 .go-btn.green{background:#1a8a4a;color:#fff}.go-btn.green:hover{background:#145e33}
+.go-btn.blue{background:#185FA5;color:#fff}.go-btn.blue:hover{background:#134d8a}
 
-/* ── Student answer step ── */
+/* ── Gas card sort ── */
+.gas-panel{background:#f5f8ff;border:1px solid #c0d4f0;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;display:none}
+.gas-panel.show{display:block}
+.gas-panel-hd{font-size:13px;font-weight:700;color:#185FA5;margin-bottom:6px}
+.gas-panel-sub{font-size:12px;color:#666;margin-bottom:1rem;line-height:1.6}
+.gas-eq-display{font-size:15px;font-weight:700;color:#111;margin-bottom:1rem;font-family:monospace;background:#fff;border:1px solid #ddd;border-radius:8px;padding:10px 14px;display:inline-block}
+/* PV=nRT fraction builder */
+.pvt-builder{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem}
+.pvt-row-label{font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.pvt-dropzone{display:flex;gap:8px;flex-wrap:wrap;min-height:74px;padding:8px;background:#fff;border:2px dashed #ccc;border-radius:10px;align-items:center;transition:border-color .15s,background .15s}
+.pvt-dropzone.rdy{border-color:#185FA5;background:#eef5ff}
+.pvt-bar{width:100%;height:2px;background:#bbb;margin:4px 0}
+.pvt-fraction{display:flex;flex-direction:column;gap:4px;align-items:center}
+.pvt-result{margin-top:8px;font-size:14px;color:#555;line-height:1.8}
+.pvt-result .pvt-ans{font-size:16px;font-weight:700;color:#0f6e56}
+/* gas variable cards */
+.gcard-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+.gcard{padding:8px 12px;border:2px solid #ddd;border-radius:10px;cursor:pointer;background:#fff;text-align:center;transition:all .15s;user-select:none;min-width:90px}
+.gcard:hover{border-color:#888;transform:translateY(-1px)}
+.gcard.sel{border-color:#185FA5;border-width:2.5px;transform:translateY(-2px);background:#eef5ff}
+.gcard.placed-num{border-color:#1a8a4a;background:#f0fdf7}
+.gcard.placed-den{border-color:#1a8a4a;background:#f0fdf7}
+.gcard.wrong{border-color:#c0392b;background:#fff5f5}
+.gcard-var{font-size:15px;font-weight:700;color:#111}
+.gcard-val{font-size:12px;color:#555;margin-top:2px}
+.gcard-unit{font-size:10px;color:#888}
+/* unit cancel display */
+.unit-cx{text-decoration:line-through;color:#bbb}
+.unit-ck{color:#185FA5;font-weight:700}
+.pvt-cancel-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px;font-size:13px;background:#fff;border:1px solid #ddd;border-radius:8px;padding:10px 14px;line-height:1.8}
+.pvt-cancel-num{display:flex;flex-direction:column;align-items:center;gap:2px}
+.pvt-cancel-bar{width:100%;height:1.5px;background:#bbb;margin:2px 0}
+.pvt-times{color:#bbb;font-size:16px;padding:0 4px}
+.pvt-eq{color:#555;font-size:16px;padding:0 6px}
+
+/* student answer */
 .ans-step{background:#f8f9ff;border:1px solid #b0c4e8;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
 .ans-input-row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
 .ans-num{width:90px;padding:8px 10px;border:2px solid #ccc;border-radius:8px;font-size:16px;font-weight:600;background:#fff;color:#111}
@@ -59,7 +95,7 @@ h1{font-size:20px;font-weight:700;margin-bottom:4px}
 .submit-btn{padding:8px 20px;font-size:14px;font-weight:700;background:#185FA5;color:#fff;border:none;border-radius:8px;cursor:pointer}
 .submit-btn:hover{background:#134d8a}
 
-/* puzzle */
+/* puzzle chain */
 .sum-bar{background:#f5f5f5;border:1px solid #e0e0e0;border-radius:10px;padding:10px 14px;margin-bottom:1rem;font-size:13px;line-height:1.8}
 .chain-row{display:flex;align-items:center;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:1.2rem}
 .op{font-size:20px;color:#bbb;font-weight:300;flex-shrink:0}
@@ -100,10 +136,8 @@ h1{font-size:20px;font-weight:700;margin-bottom:4px}
 </style>
 </head>
 <body>
-
 <h1>Stoichiometry — Solution Map</h1>
 <p style="font-size:13px;color:#666;margin-bottom:1.25rem;line-height:1.5">Work through each step to set up and solve a stoichiometry problem.</p>
-
 <p style="font-size:12px;color:#888;margin-bottom:6px">Try an example:</p>
 <div style="margin-bottom:1.25rem">
   <span class="chip" onclick="fillEx('2H&#x2082; + O&#x2082; &#x2192; 2H&#x2082;O')">2H₂ + O₂ → 2H₂O (mass)</span>
@@ -128,9 +162,7 @@ h1{font-size:20px;font-weight:700;margin-bottom:4px}
     <button class="tb" style="color:#c0392b" onclick="clearEq()">Clear</button>
   </div>
   <input type="text" id="eqIn" placeholder="e.g. 2H₂ + O₂ → 2H₂O" oninput="reset(1)"/>
-  <div style="margin-top:8px">
-    <button class="tb" style="padding:6px 16px;font-size:13px" onclick="checkEq()">Check equation</button>
-  </div>
+  <div style="margin-top:8px"><button class="tb" style="padding:6px 16px;font-size:13px" onclick="checkEq()">Check equation</button></div>
   <div class="fb" id="fb1"></div>
 </div>
 
@@ -147,24 +179,27 @@ h1{font-size:20px;font-weight:700;margin-bottom:4px}
   <div class="step-hd">Step 3 — Enter the known amount <span class="chk" id="c3">✓</span></div>
   <p style="font-size:13px;color:#666;margin-bottom:4px">How is the given substance measured?</p>
   <div class="unit-row" style="margin-top:0">
-    <button class="u-btn" id="ug" onclick="pickGUnit('g')"><span class="ul">g</span><span class="ud">grams</span></button>
-    <button class="u-btn" id="umol" onclick="pickGUnit('mol')"><span class="ul">mol</span><span class="ud">moles</span></button>
+    <button class="u-btn" id="ug"   onclick="pickGUnit('g')">  <span class="ul">g</span>     <span class="ud">grams</span></button>
+    <button class="u-btn" id="umol" onclick="pickGUnit('mol')"><span class="ul">mol</span>   <span class="ud">moles</span></button>
     <button class="u-btn" id="usol" onclick="pickGUnit('sol')"><span class="ul">mol/L</span><span class="ud">solution</span></button>
+    <button class="u-btn" id="ugas" onclick="pickGUnit('gas')"><span class="ul">PVT</span>  <span class="ud">gas (atm, L, K)</span></button>
   </div>
   <input type="text" class="amt-in" id="amtIn" placeholder="e.g. 5.0" oninput="tryAmt()" style="display:none"/>
+  <!-- solution inputs -->
   <div class="sol-inputs" id="gSolInputs">
     <p style="font-size:12px;color:#555;margin-bottom:10px">Enter the solution concentration and volume:</p>
     <div class="sol-row">
-      <div class="sol-field">
-        <label>Molarity</label>
-        <input type="text" id="gMol" placeholder="e.g. 2.00"/>
-        <div class="sol-unit">mol/L</div>
-      </div>
-      <div class="sol-field">
-        <label>Volume</label>
-        <input type="text" id="gVol" placeholder="e.g. 0.500"/>
-        <div class="sol-unit">L</div>
-      </div>
+      <div class="sol-field"><label>Molarity</label><input type="text" id="gMol" placeholder="e.g. 2.00"/><div class="sol-unit">mol/L</div></div>
+      <div class="sol-field"><label>Volume</label><input type="text" id="gVol" placeholder="e.g. 0.500"/><div class="sol-unit">L</div></div>
+    </div>
+  </div>
+  <!-- gas inputs -->
+  <div class="sol-inputs" id="gGasInputs">
+    <p style="font-size:12px;color:#555;margin-bottom:10px">Enter the gas conditions. <b>Pressure must be in atm. Temperature must be in K.</b></p>
+    <div class="sol-row">
+      <div class="sol-field"><label>Pressure (P)</label><input type="text" id="gP" placeholder="e.g. 1.50"/><div class="sol-unit">atm</div></div>
+      <div class="sol-field"><label>Volume (V)</label><input type="text" id="gV" placeholder="e.g. 2.00"/><div class="sol-unit">L</div></div>
+      <div class="sol-field"><label>Temperature (T)</label><input type="text" id="gT" placeholder="e.g. 298"/><div class="sol-unit">K &nbsp;(not °C!)</div></div>
     </div>
   </div>
   <div class="fb" id="fb3"></div>
@@ -183,25 +218,62 @@ h1{font-size:20px;font-weight:700;margin-bottom:4px}
   <div class="step-hd">Step 5 — Select the answer unit <span class="chk" id="c5">✓</span></div>
   <p style="font-size:13px;color:#666;margin-bottom:4px">What form should the answer be in?</p>
   <div class="unit-row">
-    <button class="u-btn" id="tug" onclick="pickTUnit('g')"><span class="ul">g</span><span class="ud">grams</span></button>
-    <button class="u-btn" id="tumol" onclick="pickTUnit('mol')"><span class="ul">mol</span><span class="ud">moles</span></button>
-    <button class="u-btn" id="tuM" onclick="pickTUnit('M')"><span class="ul">mol/L</span><span class="ud">molarity</span></button>
-    <button class="u-btn" id="tuL" onclick="pickTUnit('L')"><span class="ul">L</span><span class="ud">volume</span></button>
+    <button class="u-btn" id="tug"   onclick="pickTUnit('g')">  <span class="ul">g</span>     <span class="ud">grams</span></button>
+    <button class="u-btn" id="tumol" onclick="pickTUnit('mol')"><span class="ul">mol</span>   <span class="ud">moles</span></button>
+    <button class="u-btn" id="tuM"   onclick="pickTUnit('M')">  <span class="ul">mol/L</span><span class="ud">molarity</span></button>
+    <button class="u-btn" id="tuSL"  onclick="pickTUnit('SL')"> <span class="ul">L</span>     <span class="ud">sol. volume</span></button>
+    <button class="u-btn" id="tuV"   onclick="pickTUnit('V')">  <span class="ul">V (L)</span> <span class="ud">gas volume</span></button>
+    <button class="u-btn" id="tuP"   onclick="pickTUnit('P')">  <span class="ul">P (atm)</span><span class="ud">gas pressure</span></button>
+    <button class="u-btn" id="tuTK"  onclick="pickTUnit('TK')"> <span class="ul">T (K)</span> <span class="ud">gas temp</span></button>
   </div>
+  <!-- solution target sub-inputs -->
   <div class="sol-inputs" id="tSolInputs">
     <div id="tSolPrompt" style="font-size:12px;color:#555;margin-bottom:10px"></div>
     <div class="sol-row">
       <div class="sol-field">
-        <label id="tSolLabel">Volume</label>
+        <label id="tSolLabel">Value</label>
         <input type="text" id="tSolVal" placeholder="e.g. 0.750"/>
-        <div class="sol-unit" id="tSolUnitLbl">L</div>
+        <div class="sol-unit" id="tSolUnitLbl"></div>
       </div>
     </div>
+  </div>
+  <!-- gas target sub-inputs (two knowns) -->
+  <div class="sol-inputs" id="tGasInputs">
+    <div id="tGasPrompt" style="font-size:12px;color:#555;margin-bottom:10px"></div>
+    <p style="font-size:12px;color:#c0392b;font-weight:600;margin-bottom:8px">⚠ Pressure in atm · Temperature in K</p>
+    <div class="sol-row" id="tGasFields"></div>
   </div>
   <div class="fb" id="fb5"></div>
 </div>
 
-<!-- Step 6 — Student answer -->
+<!-- Gas card sort — given side (solve for n) -->
+<div class="gas-panel" id="gasGivenPanel">
+  <div class="gas-panel-hd" id="gasGivenHd">🧮 Ideal Gas Law</div>
+  <div class="gas-panel-sub" id="gasGivenSub">PV = nRT — arrange to find n.</div>
+  <div class="pvt-builder">
+    <div>
+      <div class="pvt-row-label">Numerator</div>
+      <div class="pvt-dropzone" id="pvtNum" onclick="placeGasCard('num')"></div>
+    </div>
+    <div class="pvt-bar"></div>
+    <div>
+      <div class="pvt-row-label">Denominator</div>
+      <div class="pvt-dropzone" id="pvtDen" onclick="placeGasCard('den')"></div>
+    </div>
+  </div>
+  <div style="margin-top:8px" class="slabel">Variable cards — click to select</div>
+  <div class="bank" id="gasGivenBank" style="min-height:74px"></div>
+  <div id="pvtCancelDisplay" style="display:none">
+    <div class="pvt-row-label" style="margin-top:10px">Unit cancellation</div>
+    <div class="pvt-cancel-row" id="pvtCancelRow"></div>
+    <div id="pvtResult" style="margin-top:10px;font-size:14px;color:#0f6e56;font-weight:700"></div>
+  </div>
+  <div class="fb" id="fbGasGiven"></div>
+</div>
+
+
+
+<!-- Step 6 — student answer -->
 <div class="step locked ans-step" id="s6">
   <div class="step-hd">Step 6 — Calculate your answer <span class="chk" id="c6">✓</span></div>
   <p style="font-size:13px;color:#666;margin-bottom:4px">Work out the problem yourself, then enter your answer below:</p>
@@ -211,16 +283,19 @@ h1{font-size:20px;font-weight:700;margin-bottom:4px}
     <button class="submit-btn" onclick="checkStudentAnswer()">Check answer</button>
   </div>
   <div class="fb" id="fb6"></div>
-  <div id="s6Btns" style="display:none;margin-top:1rem;display:none"></div>
+  <div id="s6Btns" style="display:none"></div>
 </div>
 
 <!-- Puzzle -->
+<!-- Summary preview shown before puzzle, after gas given panel -->
+<div id="summaryPreview" style="display:none;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:10px;padding:10px 14px;margin-bottom:1rem;font-size:13px;line-height:1.8">
+  <div id="sumEqPreview" style="font-weight:700;font-family:monospace;font-size:13px"></div>
+  <div id="sumMetaPreview" style="color:#666;font-size:13px;margin-top:2px"></div>
+</div>
+
 <div id="puzzle" style="display:none;margin-top:.5rem">
-  <div class="sum-bar">
-    <div id="sumEq" style="font-weight:700;font-family:monospace;font-size:13px"></div>
-    <div id="sumMeta" style="color:#666;font-size:13px;margin-top:2px"></div>
-  </div>
-  <div class="instr" id="puzzleInstr">Click a card to select it (turns blue), then click a slot to place it. Use ↕ flip to swap top and bottom — watch all the units cancel except the last.</div>
+  <div class="sum-bar"><div id="sumEq" style="font-weight:700;font-family:monospace;font-size:13px"></div><div id="sumMeta" style="color:#666;font-size:13px;margin-top:2px"></div></div>
+  <div class="instr" id="puzzleInstr"></div>
   <div class="slabel">Conversion chain</div>
   <div class="chain-row" id="chain"></div>
   <div class="ok-note" id="okNote">✓ All units cancel correctly — the answer appears at the end of the chain.</div>
@@ -230,12 +305,49 @@ h1{font-size:20px;font-weight:700;margin-bottom:4px}
   <div class="bank" id="bank"></div>
 </div>
 
+<!-- Gas card sort — target side (find V, P, or T) -->
+<div class="gas-panel" id="gasTargetPanel">
+  <div class="gas-panel-hd" id="gasTargetHd">🧮 Ideal Gas Law — Arrange to find the target</div>
+  <div class="gas-panel-sub" id="gasTargetSub">
+    Use PV = nRT with the moles from the solution map. Arrange cards so the target unit survives.
+  </div>
+  <div class="pvt-builder">
+    <div>
+      <div class="pvt-row-label">Numerator</div>
+      <div class="pvt-dropzone" id="pvtTNum" onclick="placeTGasCard('num')"></div>
+    </div>
+    <div class="pvt-bar"></div>
+    <div>
+      <div class="pvt-row-label">Denominator</div>
+      <div class="pvt-dropzone" id="pvtTDen" onclick="placeTGasCard('den')"></div>
+    </div>
+  </div>
+  <div style="margin-top:8px" class="slabel">Variable cards — click to select</div>
+  <div class="bank" id="gasTargetBank" style="min-height:74px"></div>
+  <div id="pvtTCancelDisplay" style="display:none">
+    <div class="pvt-row-label" style="margin-top:10px">Unit cancellation</div>
+    <div class="pvt-cancel-row" id="pvtTCancelRow"></div>
+    <div id="pvtTResult" style="margin-top:10px;font-size:14px;color:#0f6e56;font-weight:700"></div>
+  </div>
+  <div class="fb" id="fbGasTarget"></div>
+  <button class="go-btn blue" id="gasTargetContinueBtn" style="display:none" onclick="showFinalAnswer()">See the final answer ↗</button>
+</div>
+
+<!-- Final answer (gas target) -->
+<div id="finalAnsPanel" style="display:none;margin-top:1rem;padding:1rem 1.25rem;background:#f0fdf7;border:1px solid #a0dfc0;border-radius:12px">
+  <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Final Answer</div>
+  <div id="finalAnsVal" style="font-size:22px;font-weight:700;color:#0f6e56"></div>
+  <div id="finalAnsSF" style="font-size:12px;color:#888;margin-top:4px"></div>
+</div>
+
 <script>
+var R_VAL = 0.08206; // L·atm/mol·K
+
 var MASSES={H:1.008,He:4.003,Li:6.941,Be:9.012,B:10.81,C:12.011,N:14.007,O:15.999,F:19.00,Ne:20.18,Na:22.99,Mg:24.31,Al:26.98,Si:28.09,P:30.97,S:32.07,Cl:35.45,Ar:39.95,K:39.10,Ca:40.08,Fe:55.85,Co:58.93,Ni:58.69,Cu:63.55,Zn:65.38,Br:79.90,Ag:107.9,I:126.9,Ba:137.3,Pb:207.2,Mn:54.94,Cr:52.00,Ti:47.87,Sn:118.7,Au:197.0,Pt:195.1,W:183.8};
 var DI=['H2','O2','N2','F2','Cl2','Br2','I2'];
-var SOL=['Li','Be','B','C','Na','Mg','Al','Si','P','S','K','Ca','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Rb','Sr','Ag','Cd','Sn','Sb','Te','Cs','Ba','W','Pt','Au','Pb','Bi'];
+var SOLIDS=['Li','Be','B','C','Na','Mg','Al','Si','P','S','K','Ca','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Rb','Sr','Ag','Cd','Sn','Sb','Te','Cs','Ba','W','Pt','Au','Pb','Bi'];
 var NOB=['He','Ne','Ar','Kr','Xe'];
-var CPDS=['H2O','H2O2','CO','CO2','SO2','SO3','NO','NO2','N2O','N2O4','N2O5','P2O5','P4O10','SiO2','Al2O3','Fe2O3','Fe3O4','FeO','CuO','Cu2O','ZnO','MgO','CaO','Na2O','K2O','BaO','MnO','MnO2','Cr2O3','TiO2','SnO','PbO','HF','HCl','HBr','HI','HCN','HNO3','HNO2','H2SO4','H2SO3','H3PO4','H2CO3','HClO3','HClO4','H2S','NaOH','KOH','LiOH','NH3','NaCl','KCl','CaCl2','MgCl2','AlCl3','FeCl2','FeCl3','CuCl2','ZnCl2','BaCl2','AgCl','NaNO3','KNO3','AgNO3','NH4NO3','Na2SO4','K2SO4','CaSO4','MgSO4','BaSO4','CuSO4','FeSO4','Na2CO3','K2CO3','CaCO3','MgCO3','BaCO3','NaHCO3','KHCO3','Na3PO4','K3PO4','AlPO4','NaF','KF','CaF2','MgF2','NaI','KI','NaBr','KBr','AgBr','AgI','NH4Cl','CH4','C2H6','C3H8','C4H10','C2H4','C2H2','C6H6','CH3OH','C2H5OH','CH3COOH','HCOOH','CO(NH2)2','C6H12O6','C12H22O11','KCN','NaCN','N2H4','PCl3','PCl5','SF6','KMnO4','K2Cr2O7','K2CrO4','KClO3','NaClO','CaC2','Na2O2','Ca(OH)2','Ba(OH)2','Mg(OH)2','Al(OH)3','Fe(OH)2','Fe(OH)3','Fe(NO3)2','Fe(NO3)3','Cu(NO3)2','Zn(NO3)2','Ca(NO3)2','Mg(NO3)2','Al(NO3)3','Ba(NO3)2','Pb(NO3)2','Al2(SO4)3','Fe2(SO4)3','(NH4)2SO4'];
+var CPDS=['H2O','H2O2','CO','CO2','SO2','SO3','NO','NO2','N2O','SiO2','Al2O3','Fe2O3','Fe3O4','FeO','CuO','Cu2O','ZnO','MgO','CaO','Na2O','K2O','BaO','MnO','MnO2','Cr2O3','TiO2','SnO','PbO','HF','HCl','HBr','HI','HCN','HNO3','HNO2','H2SO4','H2SO3','H3PO4','H2CO3','HClO3','HClO4','H2S','NaOH','KOH','LiOH','NH3','NaCl','KCl','CaCl2','MgCl2','AlCl3','FeCl2','FeCl3','CuCl2','ZnCl2','BaCl2','AgCl','NaNO3','KNO3','AgNO3','NH4NO3','Na2SO4','K2SO4','CaSO4','MgSO4','BaSO4','CuSO4','FeSO4','Na2CO3','K2CO3','CaCO3','MgCO3','BaCO3','NaHCO3','KHCO3','Na3PO4','K3PO4','AlPO4','NaF','KF','CaF2','MgF2','NaI','KI','NaBr','KBr','AgBr','AgI','NH4Cl','CH4','C2H6','C3H8','C4H10','C2H4','C2H2','C6H6','CH3OH','C2H5OH','CH3COOH','HCOOH','CO(NH2)2','C6H12O6','C12H22O11','KCN','NaCN','N2H4','PCl3','PCl5','SF6','KMnO4','K2Cr2O7','K2CrO4','KClO3','NaClO','CaC2','Na2O2','Ca(OH)2','Ba(OH)2','Mg(OH)2','Al(OH)3','Fe(OH)2','Fe(OH)3','Fe(NO3)2','Fe(NO3)3','Cu(NO3)2','Zn(NO3)2','Ca(NO3)2','Mg(NO3)2','Al(NO3)3','Ba(NO3)2','Pb(NO3)2','Al2(SO4)3','Fe2(SO4)3','(NH4)2SO4'];
 
 function s2a(f){return f.replace(/[₀₁₂₃₄₅₆₇₈₉]/g,function(d){return'₀₁₂₃₄₅₆₇₈₉'.indexOf(d).toString();});}
 function expandP(f){var s=f,p='';while(s!==p){p=s;s=s.replace(/\(([^)]+)\)(\d*)/g,function(m,inn,n){var mul=parseInt(n||'1');return inn.replace(/([A-Z][a-z]?)(\d*)/g,function(m2,el,c){return el+(parseInt(c||'1')*mul);});});}return s;}
@@ -243,7 +355,7 @@ function countAtoms(raw){var f=expandP(s2a(raw.trim())),map={},re=/([A-Z][a-z]?)
 function molarMass(raw){var f=expandP(s2a(raw.trim())),t=0,re=/([A-Z][a-z]?)(\d*)/g,m;while((m=re.exec(f))!==null){var el=m[1],n=parseInt(m[2]||'1');if(!MASSES[el])return null;t+=MASSES[el]*n;}return t||null;}
 function valSub(raw){
   var f=s2a(raw.trim()),sg=f.match(/^([A-Z][a-z]?)(\d*)$/);
-  if(sg){var el=sg[1],n=parseInt(sg[2]||'1');if(!MASSES[el])return{ok:false,hint:'"'+raw+'" — "'+el+'" is not a recognised element.'};if(NOB.indexOf(el)>=0)return{ok:true};if(DI.indexOf(el+'2')>=0){if(n===2)return{ok:true};if(n===1)return{ok:false,hint:el+' is diatomic at room temp — write it as '+el+'₂.'};return{ok:false,hint:'Standard form of '+el+' is '+el+'₂.'};}if(SOL.indexOf(el)>=0&&n<=1)return{ok:true};return{ok:true};}
+  if(sg){var el=sg[1],n=parseInt(sg[2]||'1');if(!MASSES[el])return{ok:false,hint:'"'+raw+'" — "'+el+'" is not a recognised element.'};if(NOB.indexOf(el)>=0)return{ok:true};if(DI.indexOf(el+'2')>=0){if(n===2)return{ok:true};if(n===1)return{ok:false,hint:el+' is diatomic at room temp — write it as '+el+'₂.'};return{ok:false,hint:'Standard form of '+el+' is '+el+'₂.'};}if(SOLIDS.indexOf(el)>=0&&n<=1)return{ok:true};return{ok:true};}
   var at=countAtoms(f);if(!at){var els=[],re2=/([A-Z][a-z]?)/g,m2,bad=null;while((m2=re2.exec(f))!==null)els.push(m2[1]);for(var i=0;i<els.length;i++){if(!MASSES[els[i]]){bad=els[i];break;}}return bad?{ok:false,hint:'"'+raw+'" contains "'+bad+'" — not a recognised element.'}:{ok:false,hint:'"'+raw+'" could not be parsed.'};}
   if(CPDS.indexOf(f)>=0)return{ok:true};return{ok:true,warn:'"'+raw+'" not in our library — verify it is a real compound.'};
 }
@@ -261,11 +373,23 @@ function cSF(str){str=str.trim();if(!str||isNaN(parseFloat(str)))return 1;var hd
 function toSF(n,sf){if(!n)return'0';var mag=Math.floor(Math.log10(Math.abs(n))),f=Math.pow(10,sf-1-mag),r=Math.round(n*f)/f;return r.toFixed(Math.max(0,sf-1-mag));}
 function minSF(){var args=Array.prototype.slice.call(arguments);return Math.min.apply(null,args.map(function(s){return cSF(String(s));}));}
 
+// ── State ──
 var EQ=null,gSub=null,_gUnit=null,gUnit=null,tSub=null,tUnit=null;
-var gAmt=null,gMolarity=null,gVolume=null,tKnown=null;
+var gAmt=null,gMolarity=null,gVolume=null;
+var gGasP=null,gGasV=null,gGasT=null; // given gas
+var tKnown=null;
+var tGasKnown={}; // {P,V,T} for target gas — whichever two are known
 var cards=[],slots=[],selCard=null,finalAns='',finalUnit='',trueAns=0,SIG=1,hints=[],hintIdx=0;
-var eqIn=document.getElementById('eqIn');
+var molesFromMap=0; // moles of target produced — used by gas target panel
 
+// Gas card sort state — given side
+var gasGivenCards=[]; // [{id,varName,numLabel,unitLabel,value,inNum,inDen}]
+var gasGivenSelId=null;
+// Gas card sort state — target side
+var gasTCards=[];
+var gasTSelId=null;
+
+var eqIn=document.getElementById('eqIn');
 function lock(n,s){document.getElementById('s'+n).classList.toggle('locked',s);}
 function chk(n,on){document.getElementById('c'+n).classList.toggle('on',on);}
 function setFb(n,msg,type){var el=document.getElementById('fb'+n);el.innerHTML=msg;el.className='fb '+(type||'');}
@@ -273,36 +397,45 @@ function hideFb(n){document.getElementById('fb'+n).className='fb';}
 
 function reset(from){
   if(from<=1){
-    EQ=null;gSub=null;_gUnit=null;gUnit=null;gAmt=null;gMolarity=null;gVolume=null;tSub=null;tUnit=null;tKnown=null;
+    EQ=null;gSub=null;_gUnit=null;gUnit=null;gAmt=null;gMolarity=null;gVolume=null;
+    gGasP=null;gGasV=null;gGasT=null;tSub=null;tUnit=null;tKnown=null;tGasKnown={};
     chk(1,false);hideFb(1);
     lock(2,true);chk(2,false);hideFb(2);document.getElementById('gBtns').innerHTML='';
     resetStep3UI();lock(3,true);chk(3,false);hideFb(3);
     lock(4,true);chk(4,false);hideFb(4);document.getElementById('tBtns').innerHTML='';
     resetStep5UI();lock(5,true);chk(5,false);hideFb(5);
-    resetStep6();lock(6,true);
+    hideGasPanels();resetStep6();lock(6,true);
     document.getElementById('puzzle').style.display='none';
+    document.getElementById('finalAnsPanel').style.display='none';
+    document.getElementById('summaryPreview').style.display='none';
   }
-  if(from===3){_gUnit=null;gUnit=null;gAmt=null;gMolarity=null;gVolume=null;resetStep3UI();chk(3,false);hideFb(3);lock(4,true);chk(4,false);hideFb(4);document.getElementById('tBtns').innerHTML='';resetStep5UI();lock(5,true);chk(5,false);hideFb(5);resetStep6();lock(6,true);document.getElementById('puzzle').style.display='none';}
-  if(from===4){tSub=null;chk(4,false);hideFb(4);resetStep5UI();tUnit=null;tKnown=null;lock(5,true);chk(5,false);hideFb(5);resetStep6();lock(6,true);document.getElementById('puzzle').style.display='none';}
-  if(from===5){tUnit=null;tKnown=null;resetStep5UI();chk(5,false);hideFb(5);resetStep6();lock(6,true);document.getElementById('puzzle').style.display='none';}
+  if(from===3){_gUnit=null;gUnit=null;gAmt=null;gMolarity=null;gVolume=null;gGasP=null;gGasV=null;gGasT=null;resetStep3UI();chk(3,false);hideFb(3);lock(4,true);chk(4,false);hideFb(4);document.getElementById('tBtns').innerHTML='';resetStep5UI();lock(5,true);chk(5,false);hideFb(5);hideGasPanels();resetStep6();lock(6,true);document.getElementById('puzzle').style.display='none';document.getElementById('finalAnsPanel').style.display='none';}
+  if(from===4){tSub=null;chk(4,false);hideFb(4);resetStep5UI();tUnit=null;tKnown=null;tGasKnown={};lock(5,true);chk(5,false);hideFb(5);hideGasPanels();resetStep6();lock(6,true);document.getElementById('puzzle').style.display='none';document.getElementById('finalAnsPanel').style.display='none';}
+  if(from===5){tUnit=null;tKnown=null;tGasKnown={};resetStep5UI();chk(5,false);hideFb(5);hideGasPanels();resetStep6();lock(6,true);document.getElementById('puzzle').style.display='none';document.getElementById('finalAnsPanel').style.display='none';}
 }
 
 function resetStep3UI(){
-  ['ug','umol','usol'].forEach(function(id){document.getElementById(id).classList.remove('sel');});
+  ['ug','umol','usol','ugas'].forEach(function(id){document.getElementById(id).classList.remove('sel');});
   document.getElementById('amtIn').style.display='none';document.getElementById('amtIn').value='';
   document.getElementById('gSolInputs').classList.remove('show');
   document.getElementById('gMol').value='';document.getElementById('gVol').value='';
+  document.getElementById('gGasInputs').classList.remove('show');
+  document.getElementById('gP').value='';document.getElementById('gV').value='';document.getElementById('gT').value='';
 }
 function resetStep5UI(){
-  ['tug','tumol','tuM','tuL'].forEach(function(id){document.getElementById(id).classList.remove('sel');});
-  document.getElementById('tSolInputs').classList.remove('show');
-  document.getElementById('tSolVal').value='';
+  ['tug','tumol','tuM','tuSL','tuV','tuP','tuTK'].forEach(function(id){document.getElementById(id).classList.remove('sel');});
+  document.getElementById('tSolInputs').classList.remove('show');document.getElementById('tSolVal').value='';
+  document.getElementById('tGasInputs').classList.remove('show');document.getElementById('tGasFields').innerHTML='';
 }
+function hideGasPanels(){document.getElementById('gasGivenPanel').classList.remove('show');document.getElementById('gasTargetPanel').classList.remove('show');document.getElementById('finalAnsPanel').style.display='none';}
 function resetStep6(){
   document.getElementById('studentAns').value='';
   hideFb(6);chk(6,false);
   document.getElementById('s6Btns').style.display='none';
   document.getElementById('s6Btns').innerHTML='';
+  // Restore default header unless step6Mode will override it immediately after
+  var hd=document.getElementById('s6').querySelector('.step-hd');
+  if(hd)hd.innerHTML='Step 6 — Calculate your answer <span class="chk" id="c6">✓</span>';
 }
 
 function fillEx(eq){eqIn.value=eq;reset(1);}
@@ -317,8 +450,7 @@ function checkEq(){
   if(errs.length){setFb(1,errs.map(function(h){return'• '+h;}).join('<br>'),'err');return;}
   var bal=isBalanced(parsed);
   if(!bal.ok){setFb(1,'This equation is not balanced. Atom counts differ:<br>'+bal.diffs.map(function(d){return'• '+d;}).join('<br>'),'err');return;}
-  EQ=parsed;chk(1,true);
-  setFb(1,'✓ Equation is balanced!'+(warns.length?'<br><small>⚠ '+warns.join('; ')+'</small>':''),'ok');
+  EQ=parsed;chk(1,true);setFb(1,'✓ Equation is balanced!'+(warns.length?'<br><small>⚠ '+warns.join('; ')+'</small>':''),'ok');
   lock(2,false);buildGBtns();
 }
 
@@ -330,102 +462,135 @@ function pickGSub(s){gSub=s;document.querySelectorAll('#gBtns .sub-btn').forEach
 
 function pickGUnit(u){
   _gUnit=u;
-  ['ug','umol','usol'].forEach(function(id){document.getElementById(id).classList.remove('sel');});
-  document.getElementById(u==='g'?'ug':u==='mol'?'umol':'usol').classList.add('sel');
-  if(u==='sol'){document.getElementById('amtIn').style.display='none';document.getElementById('gSolInputs').classList.add('show');}
-  else{document.getElementById('amtIn').style.display='block';document.getElementById('gSolInputs').classList.remove('show');}
+  ['ug','umol','usol','ugas'].forEach(function(id){document.getElementById(id).classList.remove('sel');});
+  var btnId=u==='g'?'ug':u==='mol'?'umol':u==='sol'?'usol':'ugas';
+  document.getElementById(btnId).classList.add('sel');
+  document.getElementById('amtIn').style.display=(u==='g'||u==='mol')?'block':'none';
+  document.getElementById('gSolInputs').classList.toggle('show',u==='sol');
+  document.getElementById('gGasInputs').classList.toggle('show',u==='gas');
   tryAmt();
-}
-
-function tryAmt(){
-  gAmt=null;gMolarity=null;gVolume=null;gUnit=null;
-  if(!_gUnit)return;
-  if(_gUnit==='sol'){
-    var mStr=document.getElementById('gMol').value.trim(),vStr=document.getElementById('gVol').value.trim();
-    var mVal=parseFloat(mStr),vVal=parseFloat(vStr);
-    if(!mStr||isNaN(mVal)||mVal<=0||!vStr||isNaN(vVal)||vVal<=0){resetStep46();return;}
-    gMolarity=mStr;gVolume=vStr;gUnit='sol';
-    chk(3,true);setFb(3,'✓ Given: '+mStr+' mol/L × '+vStr+' L of '+gSub.raw,'ok');
-  } else {
-    var val=document.getElementById('amtIn').value.trim(),num=parseFloat(val);
-    if(!val||isNaN(num)||num<=0){resetStep46();return;}
-    gAmt=val;gUnit=_gUnit;
-    chk(3,true);setFb(3,'✓ Given: '+gAmt+' '+gUnit+' of '+gSub.raw,'ok');
-  }
-  lock(4,false);buildTBtns();reset(4);
-}
-
-function resetStep46(){
-  chk(3,false);hideFb(3);lock(4,true);chk(4,false);hideFb(4);document.getElementById('tBtns').innerHTML='';
-  resetStep5UI();lock(5,true);chk(5,false);hideFb(5);resetStep6();lock(6,true);document.getElementById('puzzle').style.display='none';
 }
 
 document.getElementById('gMol').oninput=tryAmt;
 document.getElementById('gVol').oninput=tryAmt;
 document.getElementById('amtIn').oninput=tryAmt;
+document.getElementById('gP').oninput=tryAmt;
+document.getElementById('gV').oninput=tryAmt;
+document.getElementById('gT').oninput=tryAmt;
+
+function tryAmt(){
+  gAmt=null;gMolarity=null;gVolume=null;gGasP=null;gGasV=null;gGasT=null;gUnit=null;
+  if(!_gUnit)return;
+  if(_gUnit==='sol'){
+    var mStr=document.getElementById('gMol').value.trim(),vStr=document.getElementById('gVol').value.trim();
+    if(!mStr||isNaN(parseFloat(mStr))||parseFloat(mStr)<=0||!vStr||isNaN(parseFloat(vStr))||parseFloat(vStr)<=0){resetAfterStep3();return;}
+    gMolarity=mStr;gVolume=vStr;gUnit='sol';chk(3,true);setFb(3,'✓ Given: '+mStr+' mol/L × '+vStr+' L of '+gSub.raw,'ok');
+  } else if(_gUnit==='gas'){
+    var pStr=document.getElementById('gP').value.trim(),vvStr=document.getElementById('gV').value.trim(),tStr=document.getElementById('gT').value.trim();
+    if(!pStr||isNaN(parseFloat(pStr))||parseFloat(pStr)<=0||!vvStr||isNaN(parseFloat(vvStr))||parseFloat(vvStr)<=0||!tStr||isNaN(parseFloat(tStr))||parseFloat(tStr)<=0){resetAfterStep3();return;}
+    gGasP=pStr;gGasV=vvStr;gGasT=tStr;gUnit='gas';chk(3,true);setFb(3,'✓ Given gas: P='+pStr+' atm, V='+vvStr+' L, T='+tStr+' K','ok');
+  } else {
+    var val=document.getElementById('amtIn').value.trim();
+    if(!val||isNaN(parseFloat(val))||parseFloat(val)<=0){resetAfterStep3();return;}
+    gAmt=val;gUnit=_gUnit;chk(3,true);setFb(3,'✓ Given: '+gAmt+' '+gUnit+' of '+gSub.raw,'ok');
+  }
+  lock(4,false);buildTBtns();reset(4);
+}
+
+function resetAfterStep3(){chk(3,false);hideFb(3);lock(4,true);chk(4,false);hideFb(4);document.getElementById('tBtns').innerHTML='';resetStep5UI();lock(5,true);chk(5,false);hideFb(5);hideGasPanels();resetStep6();lock(6,true);document.getElementById('puzzle').style.display='none';}
 
 function buildTBtns(){
   var all=EQ.reactants.concat(EQ.products),c=document.getElementById('tBtns');c.innerHTML='';
-  all.forEach(function(s){
-    var b=document.createElement('button');b.className='sub-btn';b.textContent=s.raw;
-    if(s.formula===gSub.formula){b.classList.add('dim');b.title='Already selected as given';}
-    else b.onclick=(function(sub){return function(){pickTSub(sub);};})(s);
-    b.id='tb_'+s.formula;c.appendChild(b);
-  });
+  all.forEach(function(s){var b=document.createElement('button');b.className='sub-btn';b.textContent=s.raw;if(s.formula===gSub.formula){b.classList.add('dim');}else b.onclick=(function(sub){return function(){pickTSub(sub);};})(s);b.id='tb_'+s.formula;c.appendChild(b);});
 }
-function pickTSub(s){
-  tSub=s;
-  document.querySelectorAll('#tBtns .sub-btn').forEach(function(b){b.classList.remove('sel');});
-  document.getElementById('tb_'+s.formula).classList.add('sel');
-  chk(4,true);setFb(4,'Selected: '+s.raw,'ok');lock(5,false);reset(5);
-}
+function pickTSub(s){tSub=s;document.querySelectorAll('#tBtns .sub-btn').forEach(function(b){b.classList.remove('sel');});document.getElementById('tb_'+s.formula).classList.add('sel');chk(4,true);setFb(4,'Selected: '+s.raw,'ok');lock(5,false);reset(5);}
 
 function pickTUnit(u){
-  tUnit=u;tKnown=null;
-  ['tug','tumol','tuM','tuL'].forEach(function(id){document.getElementById(id).classList.remove('sel');});
-  document.getElementById(u==='g'?'tug':u==='mol'?'tumol':u==='M'?'tuM':'tuL').classList.add('sel');
-  var solIn=document.getElementById('tSolInputs');
-  if(u==='M'){
-    solIn.classList.add('show');
-    document.getElementById('tSolPrompt').textContent='To find molarity, enter the volume of the target solution:';
-    document.getElementById('tSolLabel').textContent='Volume of target solution';
-    document.getElementById('tSolUnitLbl').textContent='L';
-    document.getElementById('tSolVal').placeholder='e.g. 0.750';
-    document.getElementById('tSolVal').oninput=tryTKnown;
-    chk(5,false);hideFb(5);resetStep6();lock(6,true);
-  } else if(u==='L'){
-    solIn.classList.add('show');
-    document.getElementById('tSolPrompt').textContent='To find volume, enter the molarity of the target solution:';
-    document.getElementById('tSolLabel').textContent='Molarity of target solution';
-    document.getElementById('tSolUnitLbl').textContent='mol/L';
-    document.getElementById('tSolVal').placeholder='e.g. 1.50';
-    document.getElementById('tSolVal').oninput=tryTKnown;
-    chk(5,false);hideFb(5);resetStep6();lock(6,true);
-  } else {
-    solIn.classList.remove('show');
-    finishStep5(u);
-  }
+  tUnit=u;tKnown=null;tGasKnown={};
+  ['tug','tumol','tuM','tuSL','tuV','tuP','tuTK'].forEach(function(id){document.getElementById(id).classList.remove('sel');});
+  var btnId=u==='g'?'tug':u==='mol'?'tumol':u==='M'?'tuM':u==='SL'?'tuSL':u==='V'?'tuV':u==='P'?'tuP':'tuTK';
+  document.getElementById(btnId).classList.add('sel');
+  document.getElementById('tSolInputs').classList.remove('show');
+  document.getElementById('tGasInputs').classList.remove('show');
+  hideGasPanels();resetStep6();lock(6,true);document.getElementById('puzzle').style.display='none';
+  if(u==='M'){showSolTargetInput('To find molarity, enter the volume of the target solution:','Volume of target solution','L');}
+  else if(u==='SL'){showSolTargetInput('To find volume, enter the molarity of the target solution:','Molarity of target solution','mol/L');}
+  else if(u==='V'||u==='P'||u==='TK'){showGasTargetInputs(u);}
+  else{finishStep5();}
+}
+
+function showSolTargetInput(prompt,lbl,unit){
+  document.getElementById('tSolInputs').classList.add('show');
+  document.getElementById('tSolPrompt').textContent=prompt;
+  document.getElementById('tSolLabel').textContent=lbl;
+  document.getElementById('tSolUnitLbl').textContent=unit;
+  document.getElementById('tSolVal').placeholder='enter value';
+  document.getElementById('tSolVal').oninput=tryTKnown;
 }
 
 function tryTKnown(){
-  var val=document.getElementById('tSolVal').value.trim(),num=parseFloat(val);
-  if(!val||isNaN(num)||num<=0){tKnown=null;chk(5,false);hideFb(5);resetStep6();lock(6,true);return;}
-  tKnown=val;
-  var lbl=tUnit==='M'?('molarity — volume of target: '+val+' L'):('volume — molarity of target: '+val+' mol/L');
-  finishStep5(tUnit);
+  var val=document.getElementById('tSolVal').value.trim();
+  if(!val||isNaN(parseFloat(val))||parseFloat(val)<=0){tKnown=null;chk(5,false);hideFb(5);resetStep6();lock(6,true);return;}
+  tKnown=val;finishStep5();
 }
 
-function finishStep5(u){
-  chk(5,true);
-  var desc=u==='g'?('g of '+tSub.raw):u==='mol'?('mol of '+tSub.raw):u==='M'?('mol/L of '+tSub.raw):('L of '+tSub.raw);
-  setFb(5,'✓ Finding: '+desc,'ok');
-  // Compute true answer now so Step 6 can use it
+function showGasTargetInputs(solving){
+  document.getElementById('tGasInputs').classList.add('show');
+  var prompt='You are solving for <b>'+solving+'</b>. Enter the other two gas variables:';
+  document.getElementById('tGasPrompt').innerHTML=prompt;
+  var fields=document.getElementById('tGasFields');fields.innerHTML='';
+  var vars=['V','P','TK'];
+  vars.forEach(function(v){
+    if(v===solving)return;
+    var lbl=v==='V'?'Volume (V)':v==='P'?'Pressure (P)':'Temperature (T)';
+    var unit=v==='V'?'L':v==='P'?'atm':'K (not °C!)';
+    var placeholder=v==='V'?'e.g. 2.00':v==='P'?'e.g. 1.50':'e.g. 298';
+    var fd=document.createElement('div');fd.className='sol-field';
+    fd.innerHTML='<label>'+lbl+'</label><input type="text" id="tgas_'+v+'" placeholder="'+placeholder+'"/><div class="sol-unit">'+unit+'</div>';
+    fields.appendChild(fd);
+    document.getElementById('tgas_'+v).oninput=tryTGasKnowns;
+  });
+}
+
+function tryTGasKnowns(){
+  tGasKnown={};
+  var vars=['V','P','TK'];
+  vars.forEach(function(v){
+    if(v===tUnit)return;
+    var el=document.getElementById('tgas_'+v);
+    if(!el)return;
+    var val=el.value.trim();
+    if(val&&!isNaN(parseFloat(val))&&parseFloat(val)>0)tGasKnown[v]=val;
+  });
+  var needed=2;var have=Object.keys(tGasKnown).length;
+  if(have<needed){chk(5,false);hideFb(5);resetStep6();lock(6,true);return;}
+  finishStep5();
+}
+
+function finishStep5(){
   computeTrueAnswer();
-  // Show step 6
-  var unitLabel=u==='g'?('g '+tSub.raw):u==='mol'?('mol '+tSub.raw):u==='M'?('mol/L '+tSub.raw):('L '+tSub.raw);
-  document.getElementById('ansUnitLbl').textContent=unitLabel;
-  resetStep6();lock(6,false);
-  document.getElementById('s6').scrollIntoView({behavior:'smooth',block:'start'});
+  var unitLabel=tUnit==='g'?('g '+tSub.raw):tUnit==='mol'?('mol '+tSub.raw):tUnit==='M'?('mol/L '+tSub.raw):tUnit==='SL'?('L '+tSub.raw):tUnit==='V'?('L '+tSub.raw):tUnit==='P'?('atm '+tSub.raw):('K '+tSub.raw);
+  chk(5,true);setFb(5,'✓ Finding: '+unitLabel,'ok');
+  var isGasTarget=(tUnit==='V'||tUnit==='P'||tUnit==='TK');
+  if(gUnit==='gas'){
+    // Gas given: show gas given panel first; step 6 unlocks after gas given card sort
+    buildGasGivenPanel();
+    document.getElementById('gasGivenPanel').classList.add('show');
+    document.getElementById('gasGivenPanel').scrollIntoView({behavior:'smooth',block:'start'});
+  } else if(isGasTarget){
+    // Non-gas given, gas target: step 6 asks for final gas answer but stays locked
+    // until the solution map AND gas target card sort are complete.
+    // ansUnitLbl shows the gas unit so student knows what to find.
+    document.getElementById('ansUnitLbl').textContent=unitLabel;
+    resetStep6();lock(6,true);
+    document.getElementById('s6').querySelector('.step-hd').innerHTML=
+      'Step 6 — Complete the solution map first <span class="chk" id="c6">✓</span>';
+  } else {
+    // Normal path: unlock step 6 immediately
+    document.getElementById('ansUnitLbl').textContent=unitLabel;
+    resetStep6();lock(6,false);
+    document.getElementById('s6').scrollIntoView({behavior:'smooth',block:'start'});
+  }
 }
 
 function computeTrueAnswer(){
@@ -435,134 +600,454 @@ function computeTrueAnswer(){
   var molesGiven;
   if(gUnit==='sol'){var mVal=parseFloat(gMolarity),vVal=parseFloat(gVolume);molesGiven=mVal*vVal;SIG=minSF(gMolarity,gVolume);}
   else if(gUnit==='g'){molesGiven=parseFloat(gAmt)/mmG;SIG=cSF(gAmt);}
+  else if(gUnit==='gas'){molesGiven=(parseFloat(gGasP)*parseFloat(gGasV))/(R_VAL*parseFloat(gGasT));SIG=minSF(gGasP,gGasV,gGasT);}
   else{molesGiven=parseFloat(gAmt);SIG=cSF(gAmt);}
-  var molesTgt=molesGiven*(tc/gc);
-  if(tUnit==='g')      trueAns=molesTgt*mmT;
-  else if(tUnit==='mol')trueAns=molesTgt;
-  else if(tUnit==='M') trueAns=molesTgt/parseFloat(tKnown);
-  else                  trueAns=molesTgt/parseFloat(tKnown);
+  molesFromMap=molesGiven*(tc/gc);
+  if(tUnit==='g')       trueAns=molesFromMap*mmT;
+  else if(tUnit==='mol')trueAns=molesFromMap;
+  else if(tUnit==='M')  trueAns=molesFromMap/parseFloat(tKnown);
+  else if(tUnit==='SL') trueAns=molesFromMap/parseFloat(tKnown);
+  else if(tUnit==='V')  trueAns=(molesFromMap*R_VAL*parseFloat(tGasKnown['TK']))/parseFloat(tGasKnown['P']);
+  else if(tUnit==='P')  trueAns=(molesFromMap*R_VAL*parseFloat(tGasKnown['TK']))/parseFloat(tGasKnown['V']);
+  else                   trueAns=(parseFloat(tGasKnown['P'])*parseFloat(tGasKnown['V']))/(molesFromMap*R_VAL);
   finalAns=toSF(trueAns,SIG);
-  if(tUnit==='g')      finalUnit='g '+tSub.raw;
-  else if(tUnit==='mol')finalUnit='mol '+tSub.raw;
-  else if(tUnit==='M') finalUnit='mol/L '+tSub.raw;
-  else                  finalUnit='L '+tSub.raw;
+  finalUnit=tUnit==='g'?('g '+tSub.raw):tUnit==='mol'?('mol '+tSub.raw):tUnit==='M'?('mol/L '+tSub.raw):tUnit==='SL'?('L '+tSub.raw):tUnit==='V'?('L '+tSub.raw):tUnit==='P'?('atm '+tSub.raw):('K '+tSub.raw);
 }
 
-function clearAnsResult(){
-  hideFb(6);chk(6,false);document.getElementById('s6Btns').style.display='none';
+// ══════════════════════════════════════
+// ── Gas card sort — GIVEN side (n) ──
+// ══════════════════════════════════════
+function buildGasGivenPanel(){
+  document.getElementById('gasGivenHd').innerHTML='🧮 Ideal Gas Law — Finding moles of <b>'+gSub.raw+'</b> <span style="font-weight:400;color:#666">(given substance)</span>';
+  document.getElementById('gasGivenSub').innerHTML='PV = nRT &rarr; rearrange to isolate <b>n (mol of '+gSub.raw+')</b>. Click a card to select it, then click <b>Numerator</b> or <b>Denominator</b> to place it. Watch the units cancel — only <b>mol</b> should survive.';
+  gasGivenCards=[
+    {id:'gP', varName:'P', numLabel:gGasP+' atm',  unitLabel:'atm',        inNum:false,inDen:false},
+    {id:'gV', varName:'V', numLabel:gGasV+' L',     unitLabel:'L',          inNum:false,inDen:false},
+    {id:'gR', varName:'R', numLabel:'0.08206 L·atm',unitLabel:'mol·K',      inNum:false,inDen:false, isR:true},
+    {id:'gT', varName:'T', numLabel:gGasT+' K',     unitLabel:'K',          inNum:false,inDen:false},
+  ];
+  gasGivenSelId=null;
+  document.getElementById('pvtNum').innerHTML='<span style="font-size:12px;color:#aaa">click cards below, then click here to place in numerator</span>';
+  document.getElementById('pvtDen').innerHTML='<span style="font-size:12px;color:#aaa">click cards below, then click here to place in denominator</span>';
+  document.getElementById('pvtCancelDisplay').style.display='none';
+  hideFb('GasGiven');
+  renderGasGivenBank();
 }
+
+function renderGasGivenBank(){
+  var bank=document.getElementById('gasGivenBank');bank.innerHTML='';
+  gasGivenCards.filter(function(c){return !c.inNum&&!c.inDen;}).forEach(function(card){
+    var wrap=document.createElement('div');wrap.className='gcard-wrap';
+    var div=document.createElement('div');div.className='gcard'+(gasGivenSelId===card.id?' sel':'');
+    div.innerHTML='<div class="gcard-var">'+card.varName+'</div><div class="gcard-val">'+card.numLabel+'</div>'+(card.isR?'<div class="gcard-unit">'+card.unitLabel+'</div>':'<div class="gcard-unit">'+card.unitLabel+'</div>');
+    div.onclick=(function(id){return function(){gasGivenSelId=gasGivenSelId===id?null:id;renderGasGivenBank();renderGasFraction();};})(card.id);
+    wrap.appendChild(div);bank.appendChild(wrap);
+  });
+}
+
+function placeGasCard(row){
+  if(!gasGivenSelId)return;
+  var card=null;for(var i=0;i<gasGivenCards.length;i++)if(gasGivenCards[i].id===gasGivenSelId){card=gasGivenCards[i];break;}
+  if(!card)return;
+  // remove from current position
+  card.inNum=false;card.inDen=false;
+  card.inNum=(row==='num');card.inDen=(row==='den');
+  gasGivenSelId=null;
+  renderGasGivenBank();renderGasFraction();evaluateGasGiven();
+}
+
+function renderGasFraction(){
+  var numCards=gasGivenCards.filter(function(c){return c.inNum;});
+  var denCards=gasGivenCards.filter(function(c){return c.inDen;});
+  function rowHTML(cards,rowName){
+    if(cards.length===0)return'<span style="font-size:12px;color:#aaa">click a card then click here to place in '+rowName+'</span>';
+    return cards.map(function(c){
+      return'<div class="gcard" style="cursor:pointer" onclick="removeGasGivenCard(\''+c.id+'\')" title="click to remove">'+
+        '<div class="gcard-var">'+c.varName+'</div>'+
+        '<div class="gcard-val">'+c.numLabel+'</div>'+
+        '<div class="gcard-unit">'+c.unitLabel+'</div>'+
+        '</div>';
+    }).join('');
+  }
+  document.getElementById('pvtNum').innerHTML=rowHTML(numCards,'numerator');
+  document.getElementById('pvtDen').innerHTML=rowHTML(denCards,'denominator');
+  // Highlight drop zones when card selected
+  document.getElementById('pvtNum').classList.toggle('rdy',gasGivenSelId!==null);
+  document.getElementById('pvtDen').classList.toggle('rdy',gasGivenSelId!==null);
+}
+
+function removeGasGivenCard(id){
+  for(var i=0;i<gasGivenCards.length;i++)if(gasGivenCards[i].id===id){gasGivenCards[i].inNum=false;gasGivenCards[i].inDen=false;break;}
+  renderGasGivenBank();renderGasFraction();evaluateGasGiven();
+}
+
+function evaluateGasGiven(){
+  var numCards=gasGivenCards.filter(function(c){return c.inNum;});
+  var denCards=gasGivenCards.filter(function(c){return c.inDen;});
+  if(numCards.length+denCards.length<4){document.getElementById('pvtCancelDisplay').style.display='none';hideFb('GasGiven');return;}
+  // All 4 placed — check correctness
+  // Correct for n: P,V in num; R,T in den
+  var numIds=numCards.map(function(c){return c.id;}).sort().join(',');
+  var denIds=denCards.map(function(c){return c.id;}).sort().join(',');
+  var correct=(numIds==='gP,gV'&&denIds==='gR,gT')||(numIds==='gV,gP'&&denIds==='gT,gR');
+  showGasGivenCancellation(numCards,denCards,correct);
+}
+
+function showGasGivenCancellation(numCards,denCards,correct){
+  document.getElementById('pvtCancelDisplay').style.display='block';
+  // Unit cancellation logic for n = PV/RT
+  // num units: atm · L
+  // den units: (L·atm/mol·K) · K  = L·atm/mol
+  // result: atm·L / (L·atm/mol) = mol ✓
+  // Show cancellation row
+  var row=document.getElementById('pvtCancelRow');row.innerHTML='';
+  function makeUnit(label,cx){return'<span class="'+(cx?'unit-cx':'')+'">'+label+'</span>';}
+  var n=molesFromGasGiven();
+  if(correct){
+    // numerator: P(atm) × V(L)  denominator: R(L·atm/mol·K) × T(K)
+    row.innerHTML='<b>n</b> = '+
+      '<div class="pvt-cancel-num">'+
+        '<span>'+makeUnit(gGasP+' atm',true)+' × '+makeUnit(gGasV+' L',true)+'</span>'+
+        '<div class="pvt-cancel-bar"></div>'+
+        '<span>0.08206 '+makeUnit('L',true)+'·'+makeUnit('atm',true)+'/mol·'+makeUnit('K',true)+' × '+makeUnit(gGasT+' K',true)+'</span>'+
+      '</div>'+
+      ' = <span class="unit-ck">'+toSF(n,SIG)+' mol '+gSub.raw+'</span>';
+    document.getElementById('pvtResult').innerHTML='✓ n = <b>'+toSF(n,SIG)+' mol '+gSub.raw+'</b> — only mol survives!';
+    setFb('GasGiven','✓ Correct! n = '+toSF(n,SIG)+' mol '+gSub.raw+'. All units cancel except mol. Click below to continue.','ok');
+    if(!document.getElementById('gasGivenContinueBtn')){
+      var gcBtn=document.createElement('button');
+      gcBtn.id='gasGivenContinueBtn';gcBtn.className='go-btn blue';gcBtn.style.marginTop='12px';
+      gcBtn.textContent='Continue to calculate answer ↗';
+      gcBtn.onclick=function(){
+        var gasGivenMol=toSF(molesFromGasGiven(),SIG);
+        var previewMeta='Starting: <b>'+gasGivenMol+' mol '+gSub.raw+' (from ideal gas law)</b> &nbsp;&rarr;&nbsp; Find: <b>'+finalUnit+'</b>';
+        document.getElementById('sumEq').textContent=eqIn.value.trim();
+        document.getElementById('sumMeta').innerHTML=previewMeta;
+        document.getElementById('summaryPreview').innerHTML=
+          '<div style="font-weight:700;font-family:monospace;font-size:13px">'+eqIn.value.trim()+'</div>'+
+          '<div style="color:#666;font-size:13px;margin-top:2px">'+previewMeta+'</div>';
+        var isGasTarget=(tUnit==='V'||tUnit==='P'||tUnit==='TK');
+        if(isGasTarget){
+          // gas→gas: show summary preview then unlock step 6 for FINAL gas answer
+          // (student can calculate full answer from summary info)
+          document.getElementById('puzzle').style.display='none';
+          document.getElementById('summaryPreview').style.display='block';
+          document.getElementById('ansUnitLbl').textContent=finalUnit;
+          resetStep6();lock(6,false);
+          document.getElementById('s6').scrollIntoView({behavior:'smooth',block:'start'});
+        } else {
+          // gas given, non-gas target: show summary preview then unlock step 6
+          document.getElementById('puzzle').style.display='none';
+          document.getElementById('summaryPreview').style.display='block';
+          resetStep6();lock(6,false);
+          document.getElementById('s6').scrollIntoView({behavior:'smooth',block:'start'});
+        }
+      };
+      document.getElementById('gasGivenPanel').appendChild(gcBtn);
+    }
+  } else {
+    // Show which units survive incorrectly
+    row.innerHTML='<span style="color:#c0392b">Units do not cancel to mol — check your arrangement. P and V belong in the numerator; R and T belong in the denominator.</span>';
+    document.getElementById('pvtResult').innerHTML='';
+    setFb('GasGiven','Not quite — for n = PV/RT, P and V go in the numerator, R and T go in the denominator.','err');
+  }
+}
+
+function molesFromGasGiven(){return(parseFloat(gGasP)*parseFloat(gGasV))/(R_VAL*parseFloat(gGasT));}
+
+// ══════════════════════════════════════
+// ── Gas card sort — TARGET side ──
+// ══════════════════════════════════════
+function buildGasTargetPanel(preSolved){
+  var solving=tUnit; // 'V','P','TK'
+  var solveLabel=solving==='V'?'Volume (L)':solving==='P'?'Pressure (atm)':'Temperature (K)';
+  document.getElementById('gasTargetHd').innerHTML='🧮 Ideal Gas Law — Finding <b>'+solveLabel+'</b> of <b>'+tSub.raw+'</b> <span style="font-weight:400;color:#666">(target substance)</span>';
+  document.getElementById('gasTargetSub').innerHTML='PV = nRT &rarr; rearrange to isolate <b>'+solveLabel+'</b>. Click a card then click <b>Numerator</b> or <b>Denominator</b>. Watch the units cancel — only <b>'+solveLabel+' of '+tSub.raw+'</b> should survive.';
+
+  var n=toSF(molesFromMap,SIG);
+  gasTCards=[
+    {id:'tn', varName:'n', numLabel:n+' mol', unitLabel:'mol', inNum:false,inDen:false},
+    {id:'tR', varName:'R', numLabel:'0.08206 L·atm',unitLabel:'mol·K',inNum:false,inDen:false,isR:true},
+    {id:'tT', varName:'T', numLabel:(tGasKnown['TK']||'?')+' K', unitLabel:'K',inNum:false,inDen:false},
+    {id:'tV', varName:'V', numLabel:(tGasKnown['V']||'?')+' L',  unitLabel:'L',inNum:false,inDen:false},
+    {id:'tP', varName:'P', numLabel:(tGasKnown['P']||'?')+' atm',unitLabel:'atm',inNum:false,inDen:false},
+  ];
+  // Remove the card for the variable we're solving for (it goes on the left of the =)
+  gasTCards=gasTCards.filter(function(c){
+    if(solving==='V'&&c.id==='tV')return false;
+    if(solving==='P'&&c.id==='tP')return false;
+    if(solving==='TK'&&c.id==='tT')return false;
+    return true;
+  });
+  gasTSelId=null;
+  document.getElementById('pvtTNum').innerHTML='<span style="font-size:12px;color:#aaa">click cards below, then click here</span>';
+  document.getElementById('pvtTDen').innerHTML='<span style="font-size:12px;color:#aaa">click cards below, then click here</span>';
+  document.getElementById('pvtTCancelDisplay').style.display='none';
+  document.getElementById('gasTargetContinueBtn').style.display='none';
+  hideFb('GasTarget');
+  if(preSolved){
+    // Place all cards in correct positions
+    var solving2=tUnit;
+    gasTCards.forEach(function(c){
+      c.inNum=false;c.inDen=false;
+      if(solving2==='V'){
+        if(c.id==='tn'||c.id==='tR'||c.id==='tT') c.inNum=true; else c.inDen=true;
+      } else if(solving2==='P'){
+        if(c.id==='tn'||c.id==='tR'||c.id==='tT') c.inNum=true; else c.inDen=true;
+      } else { // TK
+        if(c.id==='tP'||c.id==='tV') c.inNum=true; else c.inDen=true;
+      }
+    });
+    renderGasTFraction();
+    evaluateGasTarget(); // shows cancellation
+    // Hide bank and cards label
+    document.getElementById('gasTargetBank').style.display='none';
+    document.getElementById('gasTargetBank').previousElementSibling.style.display='none';
+  } else {
+    document.getElementById('gasTargetBank').style.display='';
+    if(document.getElementById('gasTargetBank').previousElementSibling)
+      document.getElementById('gasTargetBank').previousElementSibling.style.display='';
+    renderGasTBank();
+  }
+}
+
+function renderGasTBank(){
+  var bank=document.getElementById('gasTargetBank');bank.innerHTML='';
+  gasTCards.filter(function(c){return !c.inNum&&!c.inDen;}).forEach(function(card){
+    var wrap=document.createElement('div');wrap.className='gcard-wrap';
+    var div=document.createElement('div');div.className='gcard'+(gasTSelId===card.id?' sel':'');
+    div.innerHTML='<div class="gcard-var">'+card.varName+'</div><div class="gcard-val">'+card.numLabel+'</div><div class="gcard-unit">'+card.unitLabel+'</div>';
+    div.onclick=(function(id){return function(){gasTSelId=gasTSelId===id?null:id;renderGasTBank();renderGasTFraction();};})(card.id);
+    wrap.appendChild(div);bank.appendChild(wrap);
+  });
+}
+
+function placeTGasCard(row){
+  if(!gasTSelId)return;
+  var card=null;for(var i=0;i<gasTCards.length;i++)if(gasTCards[i].id===gasTSelId){card=gasTCards[i];break;}
+  if(!card)return;
+  card.inNum=false;card.inDen=false;
+  card.inNum=(row==='num');card.inDen=(row==='den');
+  gasTSelId=null;
+  renderGasTBank();renderGasTFraction();evaluateGasTarget();
+}
+
+function renderGasTFraction(){
+  var numCards=gasTCards.filter(function(c){return c.inNum;});
+  var denCards=gasTCards.filter(function(c){return c.inDen;});
+  function rowHTML(cards,rowName){
+    if(cards.length===0)return'<span style="font-size:12px;color:#aaa">click a card then click here to place in '+rowName+'</span>';
+    return cards.map(function(c){
+      return'<div class="gcard" style="cursor:pointer" onclick="removeTGasCard(\''+c.id+'\')" title="click to remove">'+
+        '<div class="gcard-var">'+c.varName+'</div>'+
+        '<div class="gcard-val">'+c.numLabel+'</div>'+
+        '<div class="gcard-unit">'+c.unitLabel+'</div></div>';
+    }).join('');
+  }
+  document.getElementById('pvtTNum').innerHTML=rowHTML(numCards,'numerator');
+  document.getElementById('pvtTDen').innerHTML=rowHTML(denCards,'denominator');
+  document.getElementById('pvtTNum').classList.toggle('rdy',gasTSelId!==null);
+  document.getElementById('pvtTDen').classList.toggle('rdy',gasTSelId!==null);
+}
+
+function removeTGasCard(id){
+  for(var i=0;i<gasTCards.length;i++)if(gasTCards[i].id===id){gasTCards[i].inNum=false;gasTCards[i].inDen=false;break;}
+  renderGasTBank();renderGasTFraction();evaluateGasTarget();
+}
+
+function evaluateGasTarget(){
+  var numCards=gasTCards.filter(function(c){return c.inNum;});
+  var denCards=gasTCards.filter(function(c){return c.inDen;});
+  var total=numCards.length+denCards.length;
+  if(total<gasTCards.length){document.getElementById('pvtTCancelDisplay').style.display='none';hideFb('GasTarget');document.getElementById('gasTargetContinueBtn').style.display='none';return;}
+  // Check correct arrangement
+  var numIds=numCards.map(function(c){return c.id;}).sort().join(',');
+  var denIds=denCards.map(function(c){return c.id;}).sort().join(',');
+  var correct=false;
+  var solving=tUnit;
+  // Correct arrangements:
+  // V = nRT/P  → num: n,R,T  den: P
+  // P = nRT/V  → num: n,R,T  den: V
+  // T = PV/nR  → num: P,V    den: n,R
+  if(solving==='V'&&numIds==='tR,tT,tn'&&denIds==='tP')correct=true;
+  if(solving==='P'&&numIds==='tR,tT,tn'&&denIds==='tV')correct=true;
+  if(solving==='TK'&&numIds==='tP,tV'&&denIds==='tR,tn')correct=true;
+  showGasTCancellation(numCards,denCards,correct);
+}
+
+function showGasTCancellation(numCards,denCards,correct){
+  document.getElementById('pvtTCancelDisplay').style.display='block';
+  var row=document.getElementById('pvtTCancelRow');row.innerHTML='';
+  function makeUnit(label,cx){return'<span class="'+(cx?'unit-cx':'unit-ck')+'">'+label+'</span>';}
+  var solving=tUnit;
+  if(correct){
+    var ans=trueAns;
+    var ansStr=toSF(ans,SIG);
+    var unitStr=solving==='V'?'L':solving==='P'?'atm':'K';
+    // Build cancellation display
+    var numStr=numCards.map(function(c){
+      if(c.isR)return'0.08206 <span class="unit-cx">L·atm</span>/<span class="unit-cx">mol</span>·'+(solving==='TK'?'<span class="unit-ck">K</span>':'<span class="unit-cx">K</span>');
+      return c.numLabel.replace('atm',solving==='P'?'<span class="unit-ck">atm</span>':'<span class="unit-cx">atm</span>').replace(' L',solving==='V'?' <span class="unit-ck">L</span>':' <span class="unit-cx">L</span>').replace(' K',solving==='TK'?' <span class="unit-ck">K</span>':' <span class="unit-cx">K</span>').replace(' mol','<span class="unit-cx"> mol</span>');
+    }).join(' × ');
+    var denStr=denCards.map(function(c){
+      if(c.isR)return'0.08206 <span class="unit-cx">L·atm</span>/<span class="unit-cx">mol</span>·'+(solving==='TK'?'<span class="unit-cx">K</span>':'<span class="unit-cx">K</span>');
+      return c.numLabel.replace(' mol','<span class="unit-cx"> mol</span>').replace(' atm','<span class="unit-cx"> atm</span>').replace(' L','<span class="unit-cx"> L</span>').replace(' K','<span class="unit-cx"> K</span>');
+    }).join(' × ');
+    row.innerHTML='<b>'+solving+'</b> = <div class="pvt-cancel-num"><span>'+numStr+'</span><div class="pvt-cancel-bar"></div><span>'+denStr+'</span></div> = <span class="unit-ck">'+ansStr+' '+unitStr+' '+tSub.raw+'</span>';
+    document.getElementById('pvtTResult').innerHTML='✓ Only <b>'+unitStr+'</b> survives — answer: <b>'+ansStr+' '+unitStr+' '+tSub.raw+'</b>';
+    setFb('GasTarget','✓ Correct! All units cancel except '+unitStr+'. Enter your final answer in Step 6 below.','ok');
+    // Set up Step 6 in finalGas mode — MUST set mode AFTER resetStep6
+    document.getElementById('ansUnitLbl').textContent=finalUnit;
+    resetStep6(); // clears _step6Mode
+    window._step6Mode='finalGas'; // re-set after resetStep6
+    var hd2=document.getElementById('s6').querySelector('.step-hd');
+    if(hd2) hd2.innerHTML='Step 6 — Enter the final answer <span class="chk" id="c6">✓</span>';
+    lock(6,false);
+    document.getElementById('s6').scrollIntoView({behavior:'smooth',block:'start'});
+    document.getElementById('gasTargetContinueBtn').style.display='none';
+  } else {
+    var hint='';
+    if(solving==='V')hint='For V = nRT/P, put n, R, and T in the numerator; P in the denominator.';
+    if(solving==='P')hint='For P = nRT/V, put n, R, and T in the numerator; V in the denominator.';
+    if(solving==='TK')hint='For T = PV/nR, put P and V in the numerator; n and R in the denominator.';
+    row.innerHTML='<span style="color:#c0392b">Units do not cancel correctly. '+hint+'</span>';
+    document.getElementById('pvtTResult').innerHTML='';
+    setFb('GasTarget',hint,'err');
+    document.getElementById('gasTargetContinueBtn').style.display='none';
+  }
+}
+
+function showFinalAnswer(){
+  var ansStr=toSF(trueAns,SIG);
+  var unitStr=tUnit==='V'?'L '+tSub.raw:tUnit==='P'?'atm '+tSub.raw:'K '+tSub.raw;
+  document.getElementById('finalAnsVal').textContent=ansStr+' '+unitStr;
+  document.getElementById('finalAnsSF').textContent=SIG+' significant figure'+(SIG===1?'':'s');
+  document.getElementById('finalAnsPanel').style.display='block';
+  document.getElementById('finalAnsPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── Called when solution map is complete and tUnit is a gas variable ──
+function onMapSolvedForGasTarget(){
+  // Go straight to gas target card sort — no mol checkpoint
+  buildGasTargetPanel(false);
+  document.getElementById('gasTargetPanel').classList.add('show');
+  document.getElementById('gasTargetPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── Student answer check ──
+function clearAnsResult(){hideFb(6);chk(6,false);document.getElementById('s6Btns').style.display='none';}
 
 function checkStudentAnswer(){
   var raw=document.getElementById('studentAns').value.trim();
   var sVal=parseFloat(raw);
   if(!raw||isNaN(sVal)){setFb(6,'Please enter a number.','err');return;}
-
-  // Correct: within 1% of true answer, or within rounding of sig-fig answer
-  // ── Evaluate the student answer across two independent axes ──
-  var pctErr = Math.abs((sVal - trueAns) / trueAns) * 100;
-  var mathOK  = pctErr < 1.0;           // numerically correct (within 1%)
-  var sfOK    = cSF(raw) === SIG;       // sig fig count matches expected
-
-  // Detect direction of sig fig error for tailored messages
-  var sfTooFew  = !sfOK && cSF(raw) < SIG;
-  var sfTooMany = !sfOK && cSF(raw) > SIG;
-
-  var btns = document.getElementById('s6Btns');
-  btns.innerHTML = ''; btns.style.display = 'block';
-
-  var msg = '', fbType = '', btnLabel = '', preSolve = false;
-
-  if(mathOK && sfOK){
-    // ── Case 1: Right answer, right sig figs ──
-    chk(6, true);
-    msg = '✓ <b>Perfect.</b> Your answer <b>'+sVal+' '+finalUnit+'</b> is correct and rounded to exactly '
-      +SIG+' significant figure'+(SIG===1?'':'s')+' — matching the precision of your given data. '
-      +'See the completed solution map below to review how every unit cancels.';
-    fbType = 'ok'; btnLabel = 'See the completed solution map ↗'; preSolve = true;
-
-  } else if(mathOK && sfTooFew){
-    // ── Case 2a: Right answer, too few sig figs ──
-    msg = '⚠ <b>Your calculation is correct, but you rounded too aggressively.</b><br><br>'
-      +'You wrote <b>'+sVal+'</b> — that is '+cSF(raw)+' significant figure'+(cSF(raw)===1?'':'s')
-      +', but your given data has <b>'+SIG+' sig fig'+(SIG===1?'':'s')+'</b>, '
-      +'so the answer should be <b>'+toSF(trueAns,SIG)+' '+finalUnit+'</b>.<br><br>'
-      +'<b>Why it matters:</b> rounding too early discards real precision your measurements support. '
-      +'Keep all digits through intermediate steps and round only the final answer.';
-    fbType = 'warn'; btnLabel = 'See the completed solution map ↗'; preSolve = true;
-
-  } else if(mathOK && sfTooMany){
-    // ── Case 2b: Right answer, too many sig figs ──
-    msg = '⚠ <b>Your calculation is correct, but you reported too many significant figures.</b><br><br>'
-      +'You wrote <b>'+sVal+'</b> — that is '+cSF(raw)+' significant figures, '
-      +'but your given data only supports <b>'+SIG+' sig fig'+(SIG===1?'':'s')+'</b>, '
-      +'so the answer should be <b>'+toSF(trueAns,SIG)+' '+finalUnit+'</b>.<br><br>'
-      +'<b>Why it matters:</b> extra digits imply a precision your measurements cannot justify. '
-      +'Your final answer should never be more precise than the least precise value in the problem.';
-    fbType = 'warn'; btnLabel = 'See the completed solution map ↗'; preSolve = true;
-
-  } else if(!mathOK && sfOK){
-    // ── Case 3: Wrong answer, right sig figs ──
-    var hint = diagnose(sVal);
-    msg = '✗ <b>Your sig figs are right ('+SIG+'), but the numerical answer is off.</b><br><br>'
-      +hint+'<br><br>'
-      +'Work through the solution map below — place each conversion card and watch the units cancel to find where the calculation went wrong.';
-    fbType = 'err'; btnLabel = 'Work through the solution map ↗'; preSolve = false;
-
-  } else {
-    // ── Case 4: Wrong answer, wrong sig figs ──
-    var hint2 = diagnose(sVal);
-    var sfNote = sfTooFew
-      ? 'You also rounded to '+cSF(raw)+' sig fig'+(cSF(raw)===1?'':'s')+' — once you have the right answer, keep it to <b>'+SIG+'</b> sig fig'+(SIG===1?'':'s')+'.'
-      : 'You also reported '+cSF(raw)+' sig figs — once you have the right answer, round it to <b>'+SIG+'</b> sig fig'+(SIG===1?'':'s')+'.';
-    msg = '✗ <b>The numerical answer needs work, and the sig figs need attention too — but fix the chemistry first.</b><br><br>'
-      +hint2+'<br><br>'
-      +'<b>Sig figs:</b> '+sfNote+'<br><br>'
-      +'Work through the solution map below to find the error step by step.';
-    fbType = 'err'; btnLabel = 'Work through the solution map ↗'; preSolve = false;
+  var pctErr=Math.abs((sVal-trueAns)/trueAns)*100;
+  var mathOK=pctErr<1.0;
+  var sfOK=cSF(raw)===SIG;
+  var sfTooFew=!sfOK&&cSF(raw)<SIG;
+  var sfTooMany=!sfOK&&cSF(raw)>SIG;
+  var btns=document.getElementById('s6Btns');btns.innerHTML='';btns.style.display='block';
+  var msg='',fbType='',btnLabel='',preSolve=false;
+  // (molTarget checkpoint removed — gas target goes straight to card sort)
+  // ── Checkpoint: final gas answer (V, P, or T) ──
+  if(window._step6Mode==='finalGas'){
+    if(mathOK&&sfOK){
+      chk(6,true);
+      setFb(6,'✓ <b>Perfect!</b> '+sVal+' '+finalUnit+' — correct answer and correct sig figs.','ok');
+    } else if(mathOK&&sfTooFew){
+      setFb(6,'⚠ <b>Calculation correct, but too few sig figs.</b> Should be <b>'+toSF(trueAns,SIG)+' '+finalUnit+'</b> ('+SIG+' sig fig'+(SIG===1?'':'s')+').<br><b>Why it matters:</b> rounding too early loses precision your data supports.','warn');
+    } else if(mathOK&&sfTooMany){
+      setFb(6,'⚠ <b>Calculation correct, but too many sig figs.</b> Should be <b>'+toSF(trueAns,SIG)+' '+finalUnit+'</b> ('+SIG+' sig fig'+(SIG===1?'':'s')+').<br><b>Why it matters:</b> extra digits imply precision your data cannot justify.','warn');
+    } else if(!mathOK&&sfOK){
+      setFb(6,'✗ <b>Sig figs right ('+SIG+'), but the answer is off.</b><br>Review your gas law arrangement above — check which variables belong in the numerator vs denominator.','err');
+    } else {
+      var sfNote5=sfTooFew?'too few — use '+SIG+' sig figs':'too many — round to '+SIG+' sig figs';
+      setFb(6,'✗ <b>Answer off and sig figs need work ('+sfNote5+').</b><br>Review the gas law arrangement above. Correct answer: '+toSF(trueAns,SIG)+' '+finalUnit+'.','err');
+    }
+    window._step6Mode=null;
+    var btns3=document.getElementById('s6Btns');btns3.innerHTML='';btns3.style.display='block';
+    var revBtn=document.createElement('button');
+    revBtn.className='go-btn green';
+    revBtn.textContent='See the final answer ↗';
+    revBtn.onclick=showFinalAnswer;
+    btns3.appendChild(revBtn);
+    return;
   }
-
-  setFb(6, msg, fbType);
-  var btn = document.createElement('button');
-  btn.className = preSolve ? 'go-btn green' : 'go-btn dark';
-  btn.textContent = btnLabel;
-  btn.onclick = (function(ps){ return function(){ buildPuzzle(ps); }; })(preSolve);
+  if(mathOK&&sfOK){
+    chk(6,true);
+    msg='✓ <b>Perfect.</b> Your answer <b>'+sVal+' '+finalUnit+'</b> is correct and rounded to exactly '+SIG+' significant figure'+(SIG===1?'':'s')+' — matching the precision of your given data. See the completed solution map below.';
+    fbType='ok';btnLabel='See the completed solution map ↗';preSolve=true;
+  } else if(mathOK&&sfTooFew){
+    msg='⚠ <b>Your calculation is correct, but you rounded too aggressively.</b><br><br>'
+      +'You wrote <b>'+sVal+'</b> — that is '+cSF(raw)+' significant figure'+(cSF(raw)===1?'':'s')+', but your given data has <b>'+SIG+' sig fig'+(SIG===1?'':'s')+'</b>, so the answer should be <b>'+toSF(trueAns,SIG)+' '+finalUnit+'</b>.<br><br>'
+      +'<b>Why it matters:</b> rounding too early discards real precision your measurements support. Keep all digits through intermediate steps and round only the final answer.';
+    fbType='warn';btnLabel='See the completed solution map ↗';preSolve=true;
+  } else if(mathOK&&sfTooMany){
+    msg='⚠ <b>Your calculation is correct, but you reported too many significant figures.</b><br><br>'
+      +'You wrote <b>'+sVal+'</b> — that is '+cSF(raw)+' significant figures, but your given data only supports <b>'+SIG+' sig fig'+(SIG===1?'':'s')+'</b>, so the answer should be <b>'+toSF(trueAns,SIG)+' '+finalUnit+'</b>.<br><br>'
+      +'<b>Why it matters:</b> extra digits imply a precision your measurements cannot justify. Your final answer should never be more precise than the least precise value in the problem.';
+    fbType='warn';btnLabel='See the completed solution map ↗';preSolve=true;
+  } else if(!mathOK&&sfOK){
+    var hint=diagnose(sVal);
+    msg='✗ <b>Your sig figs are right ('+SIG+'), but the numerical answer is off.</b><br><br>'+hint+'<br><br>Work through the solution map below to find where the calculation went wrong.';
+    fbType='err';btnLabel='Work through the solution map ↗';preSolve=false;
+  } else {
+    var hint2=diagnose(sVal);
+    var sfNote=sfTooFew?'You also rounded to '+cSF(raw)+' sig fig'+(cSF(raw)===1?'':'s')+' — once you have the right answer, keep it to <b>'+SIG+'</b> sig fig'+(SIG===1?'':'s')+'.':'You also reported '+cSF(raw)+' sig figs — once you have the right answer, round it to <b>'+SIG+'</b> sig fig'+(SIG===1?'':'s')+'.';
+    msg='✗ <b>The numerical answer needs work, and the sig figs need attention too — fix the chemistry first.</b><br><br>'+hint2+'<br><br><b>Sig figs:</b> '+sfNote+'<br><br>Work through the solution map to find the error.';
+    fbType='err';btnLabel='Work through the solution map ↗';preSolve=false;
+  }
+  setFb(6,msg,fbType);
+  var btn=document.createElement('button');
+  btn.className=preSolve?'go-btn green':'go-btn dark';
+  btn.textContent=btnLabel;
+  var isGasTgt=(tUnit==='V'||tUnit==='P'||tUnit==='TK');
+  btn.onclick=(function(ps,gTgt){return function(){
+    buildPuzzle(ps);
+    if(gTgt&&ps){
+      // Correct gas target: show pre-solved gas panel after map
+      setTimeout(function(){
+        buildGasTargetPanel(true);
+        document.getElementById('gasTargetPanel').classList.add('show');
+        document.getElementById('gasTargetPanel').scrollIntoView({behavior:'smooth',block:'start'});
+        // Also show final answer panel
+        setTimeout(showFinalAnswer, 400);
+      }, 400);
+    }
+  };})(preSolve,isGasTgt);
   btns.appendChild(btn);
 }
 
-function diagnose(sVal){
-  // Try to figure out what went wrong
-  var mmG=molarMass(gSub.formula),mmT=molarMass(tSub.formula);
+function diagnoseMol(sVal){
   var gc=gSub.coeff,tc=tSub.coeff;
   var molesGiven;
-  if(gUnit==='sol'){molesGiven=parseFloat(gMolarity)*parseFloat(gVolume);}
-  else if(gUnit==='g'){molesGiven=parseFloat(gAmt)/mmG;}
-  else{molesGiven=parseFloat(gAmt);}
-
-  // Check if they forgot the mole ratio (used 1:1)
+  if(gUnit==='gas') molesGiven=molesFromGasGiven();
+  else if(gUnit==='sol') molesGiven=parseFloat(gMolarity)*parseFloat(gVolume);
+  else if(gUnit==='g') molesGiven=parseFloat(gAmt)/molarMass(gSub.formula);
+  else molesGiven=parseFloat(gAmt);
   var wrongRatio=molesGiven;
-  if(tUnit==='g') wrongRatio*=mmT;
-  if(Math.abs((sVal-wrongRatio)/wrongRatio)<0.01) return 'It looks like you may have skipped the mole ratio — remember to convert mol '+gSub.raw+' → mol '+tSub.raw+' using the coefficients ('+gc+':'+tc+').';
+  if(Math.abs((sVal-wrongRatio)/wrongRatio)<0.01)
+    return 'It looks like you skipped the mole ratio. Multiply by '+tc+'/'+gc+' to convert mol '+gSub.raw+' → mol '+tSub.raw+'.';
+  var inverted=molesGiven*(gc/tc);
+  if(Math.abs((sVal-inverted)/inverted)<0.01)
+    return 'The mole ratio appears inverted. Use '+tc+' mol '+tSub.raw+' per '+gc+' mol '+gSub.raw+'.';
+  return 'Check your mole ratio. Starting from '+toSF(molesGiven,SIG)+' mol '+gSub.raw+', multiply by ('+tc+'/'+gc+').';
+}
 
-  // Check if they used the mole ratio inverted
-  var invertedRatio=molesGiven*(gc/tc);
-  if(tUnit==='g') invertedRatio*=mmT;
-  if(Math.abs((sVal-invertedRatio)/invertedRatio)<0.01) return 'It looks like the mole ratio may be inverted — the ratio should be '+tc+' mol '+tSub.raw+' per '+gc+' mol '+gSub.raw+', not the other way around.';
-
-  // Check if they forgot g→mol conversion
-  if(gUnit==='g'){
-    var forgotConvert=parseFloat(gAmt)*(tc/gc);
-    if(tUnit==='g') forgotConvert*=mmT;
-    if(Math.abs((sVal-forgotConvert)/forgotConvert)<0.01) return 'It looks like you may have used the given grams directly without converting to moles first. Start by dividing '+gAmt+' g by the molar mass of '+gSub.raw+' ('+mmG.toFixed(2)+' g/mol).';
-  }
-
-  // Check if they forgot mol→g at the end
-  if(tUnit==='g'){
-    var molesTgt=molesGiven*(tc/gc);
-    if(Math.abs((sVal-molesTgt)/molesTgt)<0.01) return 'It looks like you stopped at moles of '+tSub.raw+' ('+toSF(molesTgt,SIG)+' mol) without converting to grams. Multiply by the molar mass of '+tSub.raw+' ('+mmT.toFixed(2)+' g/mol).';
-  }
-
-  // Generic
-  return 'The correct answer is '+toSF(trueAns,SIG)+' '+finalUnit+'. Check each conversion step carefully.';
+function diagnose(sVal){
+  var mmG=molarMass(gSub.formula),mmT=molarMass(tSub.formula),gc=gSub.coeff,tc=tSub.coeff;
+  var molesGiven;
+  if(gUnit==='sol')molesGiven=parseFloat(gMolarity)*parseFloat(gVolume);
+  else if(gUnit==='gas')molesGiven=(parseFloat(gGasP)*parseFloat(gGasV))/(R_VAL*parseFloat(gGasT));
+  else if(gUnit==='g')molesGiven=parseFloat(gAmt)/mmG;
+  else molesGiven=parseFloat(gAmt);
+  var wrongRatio=molesGiven;if(tUnit==='g')wrongRatio*=mmT;
+  if(Math.abs((sVal-wrongRatio)/wrongRatio)<0.01)return'It looks like you may have skipped the mole ratio — remember to convert mol '+gSub.raw+' → mol '+tSub.raw+' using the coefficients ('+gc+':'+tc+').';
+  var invertedRatio=molesGiven*(gc/tc);if(tUnit==='g')invertedRatio*=mmT;
+  if(Math.abs((sVal-invertedRatio)/invertedRatio)<0.01)return'The mole ratio may be inverted — the ratio should be '+tc+' mol '+tSub.raw+' per '+gc+' mol '+gSub.raw+', not the other way around.';
+  if(gUnit==='g'){var forgotConvert=parseFloat(gAmt)*(tc/gc);if(tUnit==='g')forgotConvert*=mmT;if(Math.abs((sVal-forgotConvert)/forgotConvert)<0.01)return'It looks like you may have used the given grams directly without converting to moles first.';}
+  if(tUnit==='g'){var molesTgt=molesGiven*(tc/gc);if(Math.abs((sVal-molesTgt)/molesTgt)<0.01)return'It looks like you stopped at moles of '+tSub.raw+' without converting to grams. Multiply by the molar mass ('+mmT.toFixed(2)+' g/mol).';}
+  return'The correct answer is '+toSF(trueAns,SIG)+' '+finalUnit+'. Check each conversion step carefully.';
 }
 
 // ── Puzzle engine ──
@@ -574,10 +1059,10 @@ function isOK(card){return card.slotIdx>=0&&card.slotIdx===card.correct&&card.fl
 function cancelState(){
   var okCards=[];
   for(var i=0;i<slots.length;i++){var cid=slots[i];if(!cid)break;var card=getCard(cid);if(!isOK(card))break;okCards.push({idx:i,cid:cid,card:card});}
-  var res={gCx:false,cards:{}};
-  if(okCards.length===0)return res;
+  var res={gCx:false,cards:{}};if(okCards.length===0)return res;
   var givenUnitStr;
   if(gUnit==='sol')givenUnitStr='1 L';
+  else if(gUnit==='gas')givenUnitStr='mol '+gSub.raw; // gas given panel already computed mol
   else if(gUnit==='g')givenUnitStr='g '+gSub.raw;
   else givenUnitStr='mol '+gSub.raw;
   var pending=givenUnitStr,lastOK=-1;
@@ -589,17 +1074,14 @@ function cancelState(){
       if(j===0){res.gCx=true;}
       else{var prevCid=okCards[j-1].cid;if(!res.cards[prevCid])res.cards[prevCid]={nCx:false,dCx:false,nSurv:false};res.cards[prevCid].nCx=true;}
       pending=num;lastOK=j;
-    } else break;
+    }else break;
   }
-  if(lastOK===okCards.length-1&&okCards.length===slots.length){
-    var lc=okCards[lastOK].cid;if(!res.cards[lc])res.cards[lc]={nCx:false,dCx:false,nSurv:false};
-    res.cards[lc].nCx=false;res.cards[lc].nSurv=true;
-  }
+  if(lastOK===okCards.length-1&&okCards.length===slots.length){var lc=okCards[lastOK].cid;if(!res.cards[lc])res.cards[lc]={nCx:false,dCx:false,nSurv:false};res.cards[lc].nCx=false;res.cards[lc].nSurv=true;}
   return res;
 }
 
 function cardHTML(card,nCx,dCx,nSurv){
-  return '<div class="clbl">'+card.lbl+'</div>'+
+  return'<div class="clbl">'+card.lbl+'</div>'+
     '<div class="cnum'+(nCx?' cx':(nSurv?' ck':''))+'">'+curN(card)+'</div>'+
     '<div class="cbar"></div>'+
     '<div class="cden'+(dCx?' cx':'')+'">'+curD(card)+'</div>';
@@ -623,8 +1105,7 @@ function renderBank(preSolved){
 
 function renderChain(){
   var cs=cancelState();
-  var gu=document.getElementById('gUnit');
-  if(gu)gu.className='g-unit'+(cs.gCx?' cx':'');
+  var gu=document.getElementById('gUnit');if(gu)gu.className='g-unit'+(cs.gCx?' cx':'');
   for(var i=0;i<slots.length;i++){
     var zone=document.getElementById('z'+i),fsm=document.getElementById('f'+i);if(!zone)continue;
     var cid=slots[i];
@@ -645,7 +1126,7 @@ function renderChain(){
   }
 }
 
-function render(preSolved){renderBank(preSolved);renderChain();evaluate();}
+function render(preSolved){renderBank(preSolved);renderChain();evaluate(preSolved);}
 
 function placeCard(cardId,slotIdx){
   var card=getCard(cardId);if(!card)return;
@@ -655,106 +1136,101 @@ function placeCard(cardId,slotIdx){
 }
 function retBank(cardId){var card=getCard(cardId);if(!card)return;if(card.slotIdx>=0){slots[card.slotIdx]=null;}card.slotIdx=-1;render(false);}
 
-function evaluate(){
+function evaluate(preSolved){
   var all=slots.length>0&&slots.every(function(cid){if(!cid)return false;var c=getCard(cid);return c&&isOK(c);});
   document.getElementById('okNote').style.display=all?'block':'none';
   var ab=document.getElementById('ansBox');
-  if(ab)ab.innerHTML=all?('<div class="av">'+finalAns+'</div><div class="au">'+finalUnit+'</div><div class="sf">'+SIG+' sig fig'+(SIG===1?'':'s')+'</div>'):'<div class="aq">?</div>';
+  if(ab){
+    if(all){
+      // If target is a gas variable, show intermediate moles and open gas target panel
+      if(tUnit==='V'||tUnit==='P'||tUnit==='TK'){
+        if(preSolved){
+          ab.innerHTML='<div class="av">'+finalAns+'</div><div class="au">'+finalUnit+'</div><div class="sf">'+SIG+' sig fig'+(SIG===1?'':'s')+'</div>';
+        } else {
+          ab.innerHTML='<div class="av">'+toSF(molesFromMap,SIG)+'</div><div class="au">mol '+tSub.raw+'</div><div class="sf">'+SIG+' sig fig'+(SIG===1?'':'s')+'</div>';
+          if(all&&!document.getElementById('mapToGasBtn')){
+            var mapBtn=document.createElement('button');
+            mapBtn.id='mapToGasBtn';mapBtn.className='go-btn blue';mapBtn.style.marginTop='10px';
+            mapBtn.textContent='Continue to ideal gas law ↗';
+            mapBtn.onclick=onMapSolvedForGasTarget;
+            document.getElementById('okNote').insertAdjacentElement('afterend',mapBtn);
+          }
+        }
+      } else {
+        ab.innerHTML='<div class="av">'+finalAns+'</div><div class="au">'+finalUnit+'</div><div class="sf">'+SIG+' sig fig'+(SIG===1?'':'s')+'</div>';
+      }
+    } else {
+      ab.innerHTML='<div class="aq">?</div>';
+    }
+  }
 }
 
 function doHint(){if(!hints.length)return;document.getElementById('hintTxt').textContent=hints[hintIdx%hints.length];hintIdx++;}
 
 function buildPuzzle(preSolved){
   var mmG=molarMass(gSub.formula),mmT=molarMass(tSub.formula);
-  if(!mmG||!mmT){alert('Cannot compute molar mass — check formulas.');return;}
+  if(!mmG||!mmT){alert('Cannot compute molar mass.');return;}
   var mmGr=mmG.toFixed(2),mmTr=mmT.toFixed(2),gc=gSub.coeff,tc=tSub.coeff;
-  cards=[];slots=[];selCard=null;hintIdx=0;
-  var sc=0;
+  cards=[];slots=[];selCard=null;hintIdx=0;var sc=0;
+  var gasGivenMol=gUnit==='gas'?toSF(molesFromGasGiven(),SIG):'';
 
+  // Given-side card
   if(gUnit==='sol'){
-    cards.push({id:'molarity_g',lbl:'molarity · '+gSub.raw,
-      a:{num:gMolarity+' mol '+gSub.raw,den:'1 L'},
-      b:{num:'1 L',den:gMolarity+' mol '+gSub.raw},
-      correct:sc,needFlip:false,flipped:false,slotIdx:-1});
+    cards.push({id:'molarity_g',lbl:'molarity · '+gSub.raw,a:{num:gMolarity+' mol '+gSub.raw,den:'1 L'},b:{num:'1 L',den:gMolarity+' mol '+gSub.raw},correct:sc,needFlip:false,flipped:false,slotIdx:-1});
     slots.push(null);sc++;
   } else if(gUnit==='g'){
-    cards.push({id:'mmG',lbl:'molar mass · '+gSub.raw,
-      a:{num:mmGr+' g '+gSub.raw,den:'1 mol '+gSub.raw},
-      b:{num:'1 mol '+gSub.raw,den:mmGr+' g '+gSub.raw},
-      correct:sc,needFlip:true,flipped:false,slotIdx:-1});
+    cards.push({id:'mmG',lbl:'molar mass · '+gSub.raw,a:{num:mmGr+' g '+gSub.raw,den:'1 mol '+gSub.raw},b:{num:'1 mol '+gSub.raw,den:mmGr+' g '+gSub.raw},correct:sc,needFlip:true,flipped:false,slotIdx:-1});
     slots.push(null);sc++;
   }
+  // gas given: moles already computed by gas panel — given block shows mol directly, no conversion card needed
 
-  cards.push({id:'mr',lbl:'mole ratio',
-    a:{num:tc+' mol '+tSub.raw,den:gc+' mol '+gSub.raw},
-    b:{num:gc+' mol '+gSub.raw,den:tc+' mol '+tSub.raw},
-    correct:sc,needFlip:false,flipped:false,slotIdx:-1});
+  // Mole ratio
+  cards.push({id:'mr',lbl:'mole ratio',a:{num:tc+' mol '+tSub.raw,den:gc+' mol '+gSub.raw},b:{num:gc+' mol '+gSub.raw,den:tc+' mol '+tSub.raw},correct:sc,needFlip:false,flipped:false,slotIdx:-1});
   slots.push(null);sc++;
 
+  // Target-side card
   if(tUnit==='g'){
-    cards.push({id:'mmT',lbl:'molar mass · '+tSub.raw,
-      a:{num:mmTr+' g '+tSub.raw,den:'1 mol '+tSub.raw},
-      b:{num:'1 mol '+tSub.raw,den:mmTr+' g '+tSub.raw},
-      correct:sc,needFlip:false,flipped:false,slotIdx:-1});
+    cards.push({id:'mmT',lbl:'molar mass · '+tSub.raw,a:{num:mmTr+' g '+tSub.raw,den:'1 mol '+tSub.raw},b:{num:'1 mol '+tSub.raw,den:mmTr+' g '+tSub.raw},correct:sc,needFlip:false,flipped:false,slotIdx:-1});
     slots.push(null);sc++;
   } else if(tUnit==='M'){
-    cards.push({id:'divV',lbl:'÷ volume · '+tSub.raw,
-      a:{num:tKnown+' L',den:'1'},
-      b:{num:'1',den:tKnown+' L'},
-      correct:sc,needFlip:true,flipped:false,slotIdx:-1});
+    cards.push({id:'divV',lbl:'÷ volume · '+tSub.raw,a:{num:tKnown+' L',den:'1'},b:{num:'1',den:tKnown+' L'},correct:sc,needFlip:true,flipped:false,slotIdx:-1});
     slots.push(null);sc++;
-  } else if(tUnit==='L'){
-    cards.push({id:'divM',lbl:'÷ molarity · '+tSub.raw,
-      a:{num:tKnown+' mol '+tSub.raw,den:'1 L'},
-      b:{num:'1 L',den:tKnown+' mol '+tSub.raw},
-      correct:sc,needFlip:true,flipped:false,slotIdx:-1});
+  } else if(tUnit==='SL'){
+    cards.push({id:'divM',lbl:'÷ molarity · '+tSub.raw,a:{num:tKnown+' mol '+tSub.raw,den:'1 L'},b:{num:'1 L',den:tKnown+' mol '+tSub.raw},correct:sc,needFlip:true,flipped:false,slotIdx:-1});
     slots.push(null);sc++;
   }
+  // gas target: no card in the solution map — PVT panel handles it
 
-  // If pre-solved: place all cards in correct slots with correct flip
-  if(preSolved){
-    cards.forEach(function(card){
-      card.flipped=card.needFlip;
-      card.slotIdx=card.correct;
-      slots[card.correct]=card.id;
-    });
-  } else {
-    cards.sort(function(){return Math.random()-.5;});
-  }
+  if(preSolved){cards.forEach(function(card){card.flipped=card.needFlip;card.slotIdx=card.correct;slots[card.correct]=card.id;});}
+  else{cards.sort(function(){return Math.random()-.5;});}
 
   hints=[];
-  if(gUnit==='sol')hints.push('The molarity card needs "1 L" on bottom to cancel your starting "L '+gSub.raw+'". It should have "'+gMolarity+' mol '+gSub.raw+'" on top — try it as-is.');
-  if(gUnit==='g')hints.push('The molar mass card for '+gSub.raw+' starts with g on top. Flip it so "g '+gSub.raw+'" is on the bottom to cancel your starting grams.');
-  hints.push('The mole ratio needs "mol '+gSub.raw+'" on the bottom to cancel the previous numerator.');
-  if(tUnit==='g')hints.push('The last card needs "g '+tSub.raw+'" on top and "mol '+tSub.raw+'" on the bottom.');
-  if(tUnit==='M')hints.push('The volume card starts with "'+tKnown+' L" on top. Flip it so "1" is on top and "'+tKnown+' L" is on the bottom — this turns mol into mol/L.');
-  if(tUnit==='L')hints.push('The molarity card starts with mol on top. Flip it so "1 L" is on top and "'+tKnown+' mol '+tSub.raw+'" is on the bottom — mol cancels, leaving L.');
-  hints.push("Each card's bottom unit must match the top unit of the card (or starting block) to its left.");
+  if(gUnit==='sol')hints.push('The molarity card needs "1 L" on bottom to cancel your starting L.');
+  if(gUnit==='g')hints.push('Flip the molar mass card so g '+gSub.raw+' is on the bottom to cancel your starting grams.');
+  hints.push('The mole ratio needs "mol '+gSub.raw+'" on the bottom.');
+  if(tUnit==='g')hints.push('Last card: "g '+tSub.raw+'" on top, "mol '+tSub.raw+'" on bottom.');
+  if(tUnit==='M')hints.push('Flip the volume card so "1" is on top and "'+tKnown+' L" is on the bottom.');
+  if(tUnit==='SL')hints.push('Flip the molarity card so "1 L" is on top and "'+tKnown+' mol '+tSub.raw+'" is on the bottom.');
+  if(tUnit==='V'||tUnit==='P'||tUnit==='TK')hints.push('The solution map ends at mol '+tSub.raw+'. Once complete, use the ideal gas law panel to find the final answer.');
+  hints.push("Each card's bottom unit must match the top unit of the card to its left.");
 
   var givenDesc;
-  if(gUnit==='sol')givenDesc=gMolarity+' mol/L &times; '+gVolume+' L of '+gSub.raw;
+  if(gUnit==='sol')givenDesc=gMolarity+' mol/L × '+gVolume+' L of '+gSub.raw;
+  else if(gUnit==='gas')givenDesc=gasGivenMol+' mol '+gSub.raw+' (from PVT)';
   else if(gUnit==='g')givenDesc=gAmt+' g '+gSub.raw;
   else givenDesc=gAmt+' mol '+gSub.raw;
   document.getElementById('sumEq').textContent=eqIn.value.trim();
   document.getElementById('sumMeta').innerHTML='Starting: <b>'+givenDesc+'</b> &nbsp;→&nbsp; Find: <b>'+finalUnit+'</b>';
 
-  // puzzle instructions
-  var instrEl=document.getElementById('puzzleInstr');
-  var hintBtnEl=document.getElementById('hintBtnEl');
-  if(preSolved){
-    instrEl.textContent='All units cancel except the final answer unit (shown in blue). This is what the complete dimensional analysis looks like.';
-    hintBtnEl.style.display='none';
-    document.getElementById('bankLabel').style.display='none';
-  } else {
-    instrEl.textContent='Click a card to select it (turns blue), then click a slot to place it. Use ↕ flip to swap top and bottom — watch all the units cancel except the last.';
-    hintBtnEl.style.display='block';
-    document.getElementById('bankLabel').style.display='';
-  }
+  var instrEl=document.getElementById('puzzleInstr'),hintBtnEl=document.getElementById('hintBtnEl');
+  if(preSolved){instrEl.textContent='All units cancel except the final answer unit (shown in blue).';hintBtnEl.style.display='none';document.getElementById('bankLabel').style.display='none';}
+  else{instrEl.textContent='Click a card to select it (turns blue), then click a slot to place it. Use ↕ flip to swap top and bottom.';hintBtnEl.style.display='block';document.getElementById('bankLabel').style.display='';}
 
   var chain=document.getElementById('chain');chain.innerHTML='';
   var gb=document.createElement('div');gb.className='given-blk';
   var givenBlockHTML;
   if(gUnit==='sol')givenBlockHTML='<span class="g-val">'+gVolume+'</span><span class="g-unit" id="gUnit">&nbsp;L&nbsp;'+gSub.raw+'</span>';
+  else if(gUnit==='gas')givenBlockHTML='<span class="g-val">'+gasGivenMol+'</span><span class="g-unit" id="gUnit">&nbsp;mol&nbsp;'+gSub.raw+'</span>';
   else if(gUnit==='g')givenBlockHTML='<span class="g-val">'+gAmt+'</span><span class="g-unit" id="gUnit">&nbsp;g&nbsp;'+gSub.raw+'</span>';
   else givenBlockHTML='<span class="g-val">'+gAmt+'</span><span class="g-unit" id="gUnit">&nbsp;mol&nbsp;'+gSub.raw+'</span>';
   gb.innerHTML=givenBlockHTML;chain.appendChild(gb);
@@ -762,8 +1238,7 @@ function buildPuzzle(preSolved){
   for(var i=0;i<slots.length;i++){
     var xEl=document.createElement('span');xEl.className='op';xEl.textContent='×';chain.appendChild(xEl);
     var sw=document.createElement('div');sw.className='slot-wrap';
-    var zone=document.createElement('div');zone.className='slot';zone.id='z'+i;
-    zone.innerHTML='<span style="font-size:12px;color:#aaa">empty</span>';
+    var zone=document.createElement('div');zone.className='slot';zone.id='z'+i;zone.innerHTML='<span style="font-size:12px;color:#aaa">empty</span>';
     sw.appendChild(zone);
     var fsm=document.createElement('button');fsm.className='flip-sm';fsm.id='f'+i;fsm.textContent='↕ flip';
     sw.appendChild(fsm);chain.appendChild(sw);
@@ -771,8 +1246,11 @@ function buildPuzzle(preSolved){
   var eqOp=document.createElement('span');eqOp.className='op';eqOp.textContent='=';chain.appendChild(eqOp);
   var ab=document.createElement('div');ab.className='ans-blk';ab.id='ansBox';ab.innerHTML='<div class="aq">?</div>';chain.appendChild(ab);
 
-  document.getElementById('okNote').style.display='none';
-  document.getElementById('hintTxt').textContent='';
+  document.getElementById('okNote').style.display='none';document.getElementById('hintTxt').textContent='';
+  document.getElementById('summaryPreview').style.display='none';
+  document.getElementById('gasTargetPanel').classList.remove('show');
+  document.getElementById('finalAnsPanel').style.display='none';
+  var oldMapBtn=document.getElementById('mapToGasBtn');if(oldMapBtn)oldMapBtn.remove();
   document.getElementById('puzzle').style.display='block';
   document.getElementById('puzzle').scrollIntoView({behavior:'smooth',block:'start'});
   render(preSolved);
