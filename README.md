@@ -1,3 +1,6 @@
 # chem-tools
-Stoichiometry for moles, masses and molarity
-Lewis Structures and molecular models for simple molecules following the octet
+Chem tools for Intro Chemistry
+
+	Stoichiometry for moles, masses, molarity and Gases
+	
+	Lewis Structures and molecular models for simple molecules following the octet
