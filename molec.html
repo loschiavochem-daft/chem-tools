@@ -122,7 +122,6 @@ h1{font-size:18px;font-weight:700;margin-bottom:12px;color:#1a1a1a;}
   <button id="view3d-btn">▶ View 3D structure</button>
 </div>
 <div class="hint-bar" id="hint">Drag an atom onto the canvas to start. Use the Bond tool to connect atoms.</div>
-</div>
 
 <div id="modal-wrap">
   <div id="modal-header">
@@ -138,9 +137,14 @@ h1{font-size:18px;font-weight:700;margin-bottom:12px;color:#1a1a1a;}
   <div id="viewer-container"></div>
   <div id="modal-footer">
     <span id="geom-label"></span>
-    <span>Drag to rotate · Scroll to zoom · Right-drag to pan</span>
+    <span style="display:flex;align-items:center;gap:14px;">
+      <a id="popout-link" href="#" onclick="openPopout();return false;" style="font-size:11px;color:#185FA5;text-decoration:none;font-weight:500;">↗ Open in new window</a>
+      <span>Drag to rotate · Scroll to zoom · Right-drag to pan</span>
+    </span>
   </div>
 </div>
+
+</div><!-- end #app -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.0.1/3Dmol-min.js"></script>
@@ -688,6 +692,157 @@ function open3D(){
 document.getElementById('style-btn').addEventListener('click',()=>{viewStyle=styleNext[viewStyle];updateSBtn();if(currentViewer){stopSpin();redraw3D();currentViewer.zoomTo();currentViewer.zoom(0.8);currentViewer.render();startSpin(currentViewer);document.getElementById('viewer-container').addEventListener('mousedown',stopSpin,{once:true});}});
 [['lengths-btn',()=>showLengths,v=>{showLengths=v;}],['angles-btn',()=>showAngles,v=>{showAngles=v;}],['labels-btn',()=>showLabels,v=>{showLabels=v;}]].forEach(([id,get,set])=>{document.getElementById(id).addEventListener('click',()=>{set(!get());document.getElementById(id).classList.toggle('on',get());if(currentViewer){stopSpin();redraw3D();currentViewer.render();startSpin(currentViewer);document.getElementById('viewer-container').addEventListener('mousedown',stopSpin,{once:true});}});});
 document.getElementById('modal-close').addEventListener('click',()=>{stopSpin();currentViewer=null;document.getElementById('modal-wrap').classList.remove('show');document.getElementById('viewer-container').innerHTML='';});
+function openPopout(){
+  const title=document.getElementById('modal-title').textContent||'3D structure';
+  const geom=document.getElementById('geom-label').textContent||'';
+  const win=window.open('','_blank','width=900,height=700');
+  if(!win){alert('Pop-up blocked — please allow pop-ups for this site.');return;}
+  win.document.write(`<!DOCTYPE html>
+<html><head><meta charset="UTF-8"/>
+<link rel="icon" type="image/png" href="favicon.png">
+<title>${title} — 3D View</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui,sans-serif;background:#0f1117;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+#toolbar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:#1a1d27;border-bottom:1px solid #2a2d3a;flex-wrap:wrap;flex-shrink:0;}
+#mol-title{font-size:13px;font-weight:700;color:#ccc;margin-right:6px;}
+.t-btn{height:26px;padding:0 10px;border-radius:6px;border:1px solid #3a3d4a;background:#1a1d27;cursor:pointer;font-size:11px;color:#aaa;display:flex;align-items:center;gap:3px;white-space:nowrap;font-weight:500;transition:all .12s;}
+.t-btn:hover{background:#2a2d3a;color:#fff;}
+.t-btn.on{background:#1a3a6a;border-color:#4285f4;color:#7ab4ff;font-weight:700;}
+#geom-lbl{font-size:11px;color:#666;margin-left:auto;}
+#vwrap{flex:1;position:relative;}
+#footer{padding:6px 12px;background:#1a1d27;border-top:1px solid #2a2d3a;font-size:11px;color:#555;text-align:right;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div id="toolbar">
+  <span id="mol-title">${title}</span>
+  <button class="t-btn on" id="p-style-btn">● Ball &amp; stick</button>
+  <button class="t-btn" id="p-lengths-btn">⟷ Bond lengths</button>
+  <button class="t-btn" id="p-angles-btn">∠ Bond angles</button>
+  <button class="t-btn" id="p-labels-btn">🏷 Atom labels</button>
+  <span id="geom-lbl">${geom}</span>
+</div>
+<div id="vwrap"></div>
+<div id="footer">Drag to rotate · Scroll to zoom · Right-drag to pan</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"><\/script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.0.1/3Dmol-min.js"><\/script>
+<script>
+var viewer,spinRAF,isSpinning=false;
+var CPK={H:'#dddddd',C:'#555555',N:'#4488ff',O:'#ff4422',F:'#22cc88',Cl:'#44cc44',Br:'#bb6600',S:'#ddaa00',P:'#aa44ff'};
+var VDW={H:1.20,C:1.70,N:1.55,O:1.52,F:1.47,Cl:1.75,Br:1.85,S:1.80,P:1.80};
+var styleNext={ball:'line',line:'spacefill',spacefill:'ball'};
+var styleLbl={ball:'● Ball & stick',line:'⌇ Line/stick',spacefill:'○ Space filling'};
+var d=null;
+
+function startSpin(){isSpinning=true;(function s(){if(!isSpinning||!viewer)return;viewer.rotate(0.5,'y');viewer.render();spinRAF=requestAnimationFrame(s);})();}
+function stopSpin(){isSpinning=false;if(spinRAF)cancelAnimationFrame(spinRAF);}
+
+function redraw(){
+  if(!viewer||!d)return;
+  viewer.removeAllModels();viewer.removeAllShapes();viewer.removeAllLabels();
+  var isBall=d.viewStyle==='ball',isSpace=d.viewStyle==='spacefill',bR=isBall?0.09:0.065;
+  d.atoms.forEach(function(a){
+    var c=d.coords[a.id];if(!c)return;
+    var r=isSpace?(VDW[a.el]||1.5)*0.6:isBall?0.22*({H:0.85,C:1,N:0.95,O:0.92,F:0.88,Cl:1.1,Br:1.15,S:1.1,P:1.05}[a.el]||1):0.07;
+    viewer.addSphere({center:c,radius:r,color:CPK[a.el]||'#888'});
+  });
+  if(!isSpace){
+    d.bonds.forEach(function(b){
+      var c1=d.coords[b.a1],c2=d.coords[b.a2];if(!c1||!c2)return;
+      var col1=CPK[(d.atoms.find(function(a){return a.id===b.a1;})||{el:'C'}).el]||'#888';
+      var col2=CPK[(d.atoms.find(function(a){return a.id===b.a2;})||{el:'C'}).el]||'#888';
+      var mid={x:(c1.x+c2.x)/2,y:(c1.y+c2.y)/2,z:(c1.z+c2.z)/2};
+      if(b.order===1){viewer.addCylinder({start:c1,end:mid,radius:bR,color:col1,fromCap:1,toCap:0});viewer.addCylinder({start:mid,end:c2,radius:bR,color:col2,fromCap:0,toCap:1});}
+      else{
+        var dx=c2.x-c1.x,dy=c2.y-c1.y,dz=c2.z-c1.z,len=Math.sqrt(dx*dx+dy*dy+dz*dz)||1,px,py,pz;
+        if(Math.abs(dy/len)<0.9&&Math.abs(dz/len)<0.9){px=0;py=-dz/len;pz=dy/len;}else{px=-dz/len;py=0;pz=dx/len;}
+        var pl=Math.sqrt(px*px+py*py+pz*pz)||1;px/=pl;py/=pl;pz/=pl;
+        var sep=b.order===2?0.09:0.12;
+        (b.order===2?[-0.5,0.5]:[-1,0,1]).forEach(function(o){
+          var s1={x:c1.x+px*sep*o,y:c1.y+py*sep*o,z:c1.z+pz*sep*o},s2={x:c2.x+px*sep*o,y:c2.y+py*sep*o,z:c2.z+pz*sep*o},sm={x:(s1.x+s2.x)/2,y:(s1.y+s2.y)/2,z:(s1.z+s2.z)/2};
+          viewer.addCylinder({start:s1,end:sm,radius:bR*0.85,color:col1,fromCap:1,toCap:0});
+          viewer.addCylinder({start:sm,end:s2,radius:bR*0.85,color:col2,fromCap:0,toCap:1});
+        });
+      }
+      if(d.showLengths){
+        var bl=Math.sqrt(Math.pow(c2.x-c1.x,2)+Math.pow(c2.y-c1.y,2)+Math.pow(c2.z-c1.z,2));
+        viewer.addLabel(bl.toFixed(2)+' Å',{position:mid,fontSize:11,fontColor:'#ffdd88',backgroundColor:'#000000',backgroundOpacity:0.6,borderThickness:0,inFront:true,showBackground:true});
+      }
+    });
+    if(d.showAngles){
+      d.atoms.forEach(function(cen){
+        var cc=d.coords[cen.id];if(!cc)return;
+        var nbrs=d.bonds.filter(function(b){return b.a1===cen.id||b.a2===cen.id;}).map(function(b){return{c:d.coords[b.a1===cen.id?b.a2:b.a1]};}).filter(function(n){return n.c;});
+        for(var i=0;i<nbrs.length;i++)for(var j=i+1;j<nbrs.length;j++){
+          var v1=norm(sub(nbrs[i].c,cc)),v2=norm(sub(nbrs[j].c,cc));
+          var ang=Math.acos(Math.max(-1,Math.min(1,dot(v1,v2))))*180/Math.PI;
+          var lp={x:cc.x+(v1.x+v2.x)*0.35,y:cc.y+(v1.y+v2.y)*0.35,z:cc.z+(v1.z+v2.z)*0.35};
+          viewer.addLabel(ang.toFixed(1)+'°',{position:lp,fontSize:11,fontColor:'#88ddff',backgroundColor:'#000000',backgroundOpacity:0.6,borderThickness:0,inFront:true,showBackground:true});
+        }
+      });
+    }
+  }
+  if(d.showLabels){
+    var off=isSpace?0.5:isBall?0.32:0.14;
+    d.atoms.forEach(function(a){var c=d.coords[a.id];if(!c)return;viewer.addLabel(a.el,{position:{x:c.x,y:c.y+off,z:c.z},fontSize:13,fontColor:CPK[a.el]||'#fff',backgroundColor:'transparent',showBackground:false,alignment:'center',inFront:true});});
+  }
+  viewer.render();
+}
+function sub(a,b){return{x:a.x-b.x,y:a.y-b.y,z:a.z-b.z};}
+function dot(a,b){return a.x*b.x+a.y*b.y+a.z*b.z;}
+function norm(a){var l=Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z)||1;return{x:a.x/l,y:a.y/l,z:a.z/l};}
+
+document.getElementById('p-style-btn').addEventListener('click',function(){
+  d.viewStyle=styleNext[d.viewStyle];
+  this.textContent=styleLbl[d.viewStyle];
+  this.classList.toggle('on',true);
+  stopSpin();redraw();viewer.zoomTo();viewer.zoom(0.8);viewer.render();startSpin();
+  document.getElementById('vwrap').addEventListener('mousedown',stopSpin,{once:true});
+});
+function makeToggle(id,key){
+  document.getElementById(id).addEventListener('click',function(){
+    d[key]=!d[key];this.classList.toggle('on',d[key]);
+    stopSpin();redraw();viewer.render();startSpin();
+    document.getElementById('vwrap').addEventListener('mousedown',stopSpin,{once:true});
+  });
+}
+makeToggle('p-lengths-btn','showLengths');
+makeToggle('p-angles-btn','showAngles');
+makeToggle('p-labels-btn','showLabels');
+
+document.getElementById('vwrap').addEventListener('mousedown',stopSpin,{once:true});
+
+window.addEventListener('message',function(e){
+  if(!e.data||e.data.type!=='moldata')return;
+  d=e.data;
+  // Sync button states from parent
+  document.getElementById('p-style-btn').textContent=styleLbl[d.viewStyle]||'● Ball & stick';
+  document.getElementById('p-lengths-btn').classList.toggle('on',d.showLengths);
+  document.getElementById('p-angles-btn').classList.toggle('on',d.showAngles);
+  document.getElementById('p-labels-btn').classList.toggle('on',d.showLabels);
+  viewer=$3Dmol.createViewer($('#vwrap'),{backgroundColor:'#0f1117',antialias:true});
+  redraw();
+  viewer.zoomTo();viewer.zoom(0.8);viewer.render();
+  startSpin();
+  document.getElementById('vwrap').addEventListener('mousedown',stopSpin,{once:true});
+});
+<\/script>
+</body></html>`);
+  win.document.close();
+  setTimeout(function(){
+    win.postMessage({
+      type:'moldata',
+      atoms:atoms,
+      bonds:bonds,
+      coords:currentCoords,
+      viewStyle:viewStyle,
+      showLengths:showLengths,
+      showAngles:showAngles,
+      showLabels:showLabels
+    },'*');
+  },900);
+}
 window.addEventListener('resize',resize);resize();
 </script>
 </body>
